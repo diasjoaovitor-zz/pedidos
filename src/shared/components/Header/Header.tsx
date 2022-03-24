@@ -1,5 +1,5 @@
 import React from "react"
-import { Toolbar } from "@mui/material"
+import { Toolbar, Typography } from "@mui/material"
 import { useLocation } from "react-router-dom"
 import { GoBack } from "./GoBack"
 import { ToggleTheme } from "./ToggleTheme"
@@ -13,7 +13,9 @@ export const Header: React.FC<{ title: string }> = ({ title }) => {
       color: 'black',
       justifyContent: 'space-between' 
     }}>
-      {title}
+      <Typography variant="h6" component="h1">
+        {title}
+      </Typography>
       {pathname !== '/' ? <GoBack /> : <ToggleTheme />}
     </Toolbar> 
   )

@@ -1,9 +1,7 @@
-import React from "react"
-import { Container, Toolbar, Typography } from "@mui/material"
 import { useLocation } from "react-router-dom"
+import { Container, Toolbar, Typography } from "@mui/material"
 import { GoBack } from "./GoBack"
 import { ToggleTheme } from "./ToggleTheme"
-import { margin } from "@mui/system"
 
 export const Header: React.FC<{ title: string }> = ({ title }) => {
   const { pathname } = useLocation()

@@ -6,7 +6,7 @@ export const ToggleTheme: React.FC = () => {
   const { toggleTheme } = useAppThemeContext()
 
   return (
-    <IconButton onClick={toggleTheme} sx={{ color: 'background.default'}}>
+    <IconButton onClick={toggleTheme} sx={{ color: 'background.default' }}>
       <LightbulbIcon />
     </IconButton>
   )

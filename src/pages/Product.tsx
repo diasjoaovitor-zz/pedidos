@@ -50,12 +50,6 @@ export const Product: React.FC = () => {
         defaultValue={product.name}
       />
       <TextField 
-        label="Marca" 
-        variant="outlined" 
-        fullWidth
-        defaultValue={product.brand}
-      />
-      <TextField 
         label="Descrição" 
         variant="outlined" 
         fullWidth
@@ -63,7 +57,7 @@ export const Product: React.FC = () => {
       />
       </Box>
       <div>
-        {product.availability.map(({ company, price }, i) => (
+        {product.availability.map(({ brand, company, price }, i) => (
           <Box 
             key={i} 
             component="fieldset" 
@@ -78,18 +72,24 @@ export const Product: React.FC = () => {
             }}
           >
             <TextField 
-              label="Empresa" 
+              label="Marca" 
               variant="outlined" 
               fullWidth
-              defaultValue={company}
+              defaultValue={brand}
             />
             <TextField 
               label="Valor" 
               type="number"
               variant="outlined" 
               fullWidth
-              sx={{ margin: '0 !important' }}
               defaultValue={price}
+            />
+             <TextField 
+              label="Empresa" 
+              variant="outlined" 
+              fullWidth
+              sx={{ margin: '0 !important' }}
+              defaultValue={company}
             />
           </Box>
         ))}

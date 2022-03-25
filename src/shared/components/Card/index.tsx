@@ -6,7 +6,11 @@ type Props = {
 }
 
 export const Card: React.FC<Props> = ({ title, items }) => (
-  <C sx={{ padding: '1rem', marginBottom: 2 }}>
+  <C sx={{ 
+    padding: '1rem', 
+    marginTop: 2,
+    textAlign: 'left' 
+  }}>
     <Typography 
       variant="h5" 
       component="h2"

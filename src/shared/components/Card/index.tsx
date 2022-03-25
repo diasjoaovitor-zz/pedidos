@@ -6,7 +6,7 @@ type Props = {
 }
 
 export const Card: React.FC<Props> = ({ title, items }) => (
-  <C sx={{ padding: '1rem' }}>
+  <C sx={{ padding: '1rem', marginBottom: 2 }}>
     <Typography 
       variant="h5" 
       component="h2"
@@ -24,13 +24,13 @@ export const Card: React.FC<Props> = ({ title, items }) => (
       {title}
     </Typography>
     <List>
-      {items.map(item => (
-        <>
-        <ListItem>
-          {item}
-        </ListItem>
-        <Divider />
-        </>
+      {items.map((item, i) => (
+        <div key={i}>
+          <ListItem>
+            {item}
+          </ListItem>
+          <Divider />
+        </div>
       ))}
     </List>
   </C>

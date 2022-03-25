@@ -7,7 +7,7 @@ type Props = {
 
 export const Card: React.FC<Props> = ({ title, items }) => (
   <C sx={{ 
-    padding: '1rem', 
+    padding: 2, 
     marginTop: 2,
     textAlign: 'left' 
   }}>

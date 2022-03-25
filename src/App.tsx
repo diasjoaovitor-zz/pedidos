@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AppThemeProvider } from './shared/contexts/ThemeContext'
 
-import { Home, Product } from './pages'
+import { Home, Product, Search } from './pages'
 
 const App: React.FC = () => (
   <AppThemeProvider>
@@ -9,6 +9,7 @@ const App: React.FC = () => (
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/product/:method" element={<Product />} />
+        <Route path="/search" element={<Search />} />
       </Routes>
     </BrowserRouter>
   </AppThemeProvider>

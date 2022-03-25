@@ -13,7 +13,7 @@ export const products = [
     }] 
   },
   {
-    name: 'Água Sanitária',
+    name: 'Achocolatado em Pó',
     description: '1L', 
     availability: [{
       brand: 'Teiú',
@@ -26,7 +26,7 @@ export const products = [
     }] 
   },
   {
-    name: 'Água Sanitária',
+    name: 'Leite Integral',
     description: '1L', 
     availability: [{
       brand: 'Teiú',

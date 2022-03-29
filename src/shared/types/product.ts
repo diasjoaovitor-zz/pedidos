@@ -1,4 +1,4 @@
-export type Product = {
+export type TProduct = {
   id?: string
   ref?: string
   name: string

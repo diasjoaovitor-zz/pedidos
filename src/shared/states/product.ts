@@ -1,6 +1,6 @@
-import { Product } from "../types/product"
+import { TProduct } from "../types"
 
-export const productState: Product =  {
+export const productState: TProduct =  {
   name: '',
   description: '',
   availability: [{

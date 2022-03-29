@@ -7,9 +7,11 @@ import { Header } from "./Header"
 type Props = {
   title: string
   children: ReactNode
+  autoFocus?: boolean
+  handleFocus?: () => void
 }
 
-export const Layout: React.FC<Props> = ({ title, children }) => {
+export const Layout: React.FC<Props> = ({ title, children, autoFocus, handleFocus }) => {
   return (
     <>
       <Header title={title} />
@@ -24,6 +26,8 @@ export const Layout: React.FC<Props> = ({ title, children }) => {
             width: "100%",
             marginTop: 2
           }}
+          autoFocus={autoFocus}
+          onFocus={handleFocus}
         />
         {children}
         <Link to="product/create" style={{

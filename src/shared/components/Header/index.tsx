@@ -7,12 +7,15 @@ export const Header: React.FC<{ title: string }> = ({ title }) => {
   const { pathname } = useLocation()
 
   return (
-    <Toolbar sx={{ 
-      bgcolor: 'primary.main', 
-      color: 'black',
-      justifyContent: 'space-between',
-      padding: '0'
-    }}>
+    <Toolbar 
+      component="header"
+      sx={{ 
+        bgcolor: 'primary.main', 
+        color: 'black',
+        justifyContent: 'space-between',
+        padding: '0'
+      }}
+    >
       <Container sx={{
         display: 'flex',
         alignItems: 'center',

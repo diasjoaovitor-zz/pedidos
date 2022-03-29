@@ -1,4 +1,6 @@
-export const products = [
+import { TProduct } from "../types";
+
+export const products: TProduct[] = [
   {
     name: 'Água Sanitária',
     description: '1L', 

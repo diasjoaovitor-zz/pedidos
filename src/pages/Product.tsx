@@ -3,8 +3,8 @@ import {  Box } from "@mui/system"
 import { useState } from "react"
 import { useLocation } from "react-router-dom"
 import { Header } from "../shared/components"
-import { Product as P } from "../shared/types/product"
-import { productState } from "../shared/states/product-state"
+import { TProduct } from "../shared/types"
+import { productState } from "../shared/states"
 import { useAppThemeContext } from "../shared/contexts"
 
 export const Product: React.FC = () => {
@@ -19,7 +19,7 @@ export const Product: React.FC = () => {
     buttonTitle: 'Salvar'
   }
   
-  const [ product, setProduct ] = useState<P>(productState)
+  const [ product, setProduct ] = useState<TProduct>(productState)
 
   return (
     <>

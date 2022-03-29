@@ -1,0 +1,1 @@
+export { productState } from './product'

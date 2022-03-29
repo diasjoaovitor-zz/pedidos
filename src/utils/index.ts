@@ -1,0 +1,1 @@
+export { getElementValues } from './getElementValues'

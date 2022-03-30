@@ -1,6 +1,7 @@
 import { ReactNode } from "react"
 import { Link } from "react-router-dom"
 import { Card as C, Typography, List, ListItem, Divider } from "@mui/material"
+import { Title } from "./"
 
 type Props = {
   title: string
@@ -19,25 +20,11 @@ export const Card: React.FC<Props> = ({ title, items, children }) => (
       color: 'inherit'
     }
   }}>
-    <Typography 
-      variant="h5" 
-      component="h2"
-      sx={{
-        '&::after': {
-          content: '""',
-          width: '3.2rem',
-          height: '8px',
-          bgcolor: 'primary.main',
-          display: 'block',
-          marginTop: '5px',
-          marginBottom: 2
-        }
-      }}
-    >
+    <Title component="h2">
       <Link to="/search" state={title}>
         {title}
       </Link>
-    </Typography>
+    </Title>
     <List>
       <Divider />
       {!children ? items && items.map((item, i) => (

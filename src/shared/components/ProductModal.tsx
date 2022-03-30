@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom"
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Button, Card, Divider, IconButton, Stack, Toolbar, Typography } from "@mui/material";
 import { TProductPresentation } from "../types";
 import { useAppThemeContext } from "../contexts";
+import { Title } from "./";
 
 type Props = {
   product: TProductPresentation
@@ -40,23 +40,9 @@ export const ProductModal: React.FC<Props> = ({ product, closeModal, handleUpdat
             }
           }}
         >
-          <Typography 
-            variant="h5" 
-            component="h2"
-            sx={{
-              '&::after': {
-                content: '""',
-                width: '3.2rem',
-                height: '8px',
-                bgcolor: 'primary.main',
-                display: 'block',
-                marginTop: '5px',
-                marginBottom: 2
-              }
-            }}
-          >
+          <Title component="h2">
             Detalhes
-          </Typography>
+          </Title>
           <IconButton 
             sx={{ 
               color: 'text.main' 

@@ -13,15 +13,15 @@ const ToggleTheme: React.FC = () => {
   )
 }
 
-const GoBack: React.FC = () => (
-  <Link to="/">
+const GoBack: React.FC<{to?: string}> = ({ to }) => (
+  <Link to={to || '/'}>
     <IconButton sx={{ color: 'background.default' }} >
       <ArrowBack />
     </IconButton>
   </Link>
 )
 
-export const Header: React.FC<{ title: string }> = ({ title }) => {
+export const Header: React.FC<{ title: string, to?: string }> = ({ title, to }) => {
   const { pathname } = useLocation()
 
   return (
@@ -42,7 +42,7 @@ export const Header: React.FC<{ title: string }> = ({ title }) => {
         <Typography variant="h6" component="h1">
           {title}
         </Typography>
-        {pathname !== '/' ? <GoBack /> : <ToggleTheme />}
+        {pathname !== '/' ? <GoBack to={to} /> : <ToggleTheme />}
       </Container>
     </Toolbar> 
   )

@@ -7,9 +7,10 @@ import { useAppThemeContext } from "../contexts";
 type Props = {
   product: TProductPresentation
   closeModal(): void
+  handleUpdate(id: string): void
 }
 
-export const ProductModal: React.FC<Props> = ({ product, closeModal }) => {
+export const ProductModal: React.FC<Props> = ({ product, closeModal, handleUpdate }) => {
   const { theme } = useAppThemeContext()
  
   return (
@@ -105,7 +106,7 @@ export const ProductModal: React.FC<Props> = ({ product, closeModal }) => {
             </Stack>
         </Box>
         <Stack direction="row" gap={1} marginTop={2}>
-          <Button variant="contained" fullWidth>
+          <Button variant="contained" fullWidth onClick={() => handleUpdate(product.id)}>
             Editar
           </Button>
           <Button variant="contained" color="error" fullWidth>

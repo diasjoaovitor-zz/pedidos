@@ -4,26 +4,30 @@ import { useState } from "react"
 import { useLocation } from "react-router-dom"
 import { Header } from "../shared/components"
 import { TProduct } from "../shared/types"
-import { productState } from "../shared/states"
-import { useAppThemeContext } from "../shared/contexts"
+import { useAppThemeContext, useProductContext } from "../shared/contexts"
 
 export const Product: React.FC = () => {
   const { theme } = useAppThemeContext()
+  const { productContext } = useProductContext()
   const { pathname } = useLocation()
   const method = pathname.split('/')[2]
   const state = method === 'create' ? {
+    product: {} as TProduct,
+    to: '/',
     title: 'Adicionar',
     buttonTitle: 'Adicionar'
   } : {
+    to: '/search',
+    product: productContext,
     title: 'Editar',
     buttonTitle: 'Salvar'
   }
   
-  const [ product, setProduct ] = useState<TProduct>(productState)
+  const [ product, setProduct ] = useState<TProduct>(state.product)
 
   return (
     <>
-    <Header title={state.title} />
+    <Header title={state.title} to={state.to} />
     <Box 
       component="form"
       flex={1}

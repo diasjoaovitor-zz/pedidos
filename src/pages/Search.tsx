@@ -1,34 +1,37 @@
-import { FormEvent, SyntheticEvent, useState } from "react"
-import { useLocation } from "react-router-dom"
+import { FormEvent, useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
+import { Divider, List, ListItem, Typography } from "@mui/material"
 import { Card, Chip, Layout, ProductModal } from "../shared/components"
 import { TProduct, TProductPresentation } from "../shared/types"
 import { products as p } from "../shared/repositories/products"
-import { Divider, List, ListItem, Typography } from "@mui/material"
-import { getElementValues } from "../utils"
-import { productPresentation } from "../shared/repositories/product-presentation"
+import { getElementValues } from "../shared/utils"
+import { useProductContext } from "../shared/contexts"
 
 export const Search: React.FC = () => {
+  const { 
+    productContext, setProductContext, 
+    productPresentationContext, setProductPresentationContext 
+  } = useProductContext()
   const { state: chip } = useLocation()
-
-  const [ product, setProduct ] = useState<TProductPresentation>(productPresentation)
+  const navigate = useNavigate()
+  const [ productPresentation, setProductPresentation ] = useState<TProductPresentation>(productPresentationContext)
   const [ products, setProducts ] = useState<TProduct[]>(p)
   const [ companies, setCompanies ] = useState<string[]>([])
   const [ chips, setChips ] = useState<string[]>(chip ? [chip as string] : [])
-  const [ modal, setModal ] = useState<boolean>(true)
+  const [ modal, setModal ] = useState<boolean>(Object.keys(productPresentationContext).length !== 0)
 
   const formatProductsPresentation = (): TProductPresentation[] => {
     let presentation: any = []
     products.forEach((product, i) => {
       presentation[i] = {
+        id: product?.id,
         name: product.name,
         description: product.description
       }
-
       product.availability.forEach(({ brand, price, company }) => {
         presentation[i] = { ...presentation[i], brand, price, company }
       })
     })
-    console.log(presentation)
     return presentation
   }
 
@@ -41,6 +44,16 @@ export const Search: React.FC = () => {
 
   const removeChip = (index: number): void => {
     setChips(chips.filter((_, i) => i !== index))
+  }
+
+  const handleUpdate = (id: string): void => {
+    if(id) {
+      setProductPresentationContext(productPresentation)
+      setProductContext(products.filter(product => product.id === id)[0])
+      navigate('/product/update')
+    } else {
+      alert('Ops')
+    }
   }
   
   return (
@@ -63,7 +76,7 @@ export const Search: React.FC = () => {
                     cursor: 'pointer' 
                   }}
                   onClick={() => {
-                    setProduct(product)
+                    setProductPresentation(product)
                     setModal(true)
                   }}
                 >
@@ -88,7 +101,13 @@ export const Search: React.FC = () => {
           </List>
         </Card>
       }
-      {modal && product && <ProductModal product={product} closeModal={() => setModal(false)} />}
+      {modal && productPresentation && 
+        <ProductModal 
+          product={productPresentation} 
+          handleUpdate={handleUpdate} 
+          closeModal={() => setModal(false)} 
+        />
+      }
     </Layout>
   )
 }

@@ -2,6 +2,7 @@ import { TProduct } from "../types";
 
 export const products: TProduct[] = [
   {
+    id: '1',
     name: 'Água Sanitária',
     description: '1L', 
     availability: [{
@@ -15,6 +16,7 @@ export const products: TProduct[] = [
     }] 
   },
   {
+    id: '2',
     name: 'Achocolatado em Pó',
     description: '1L', 
     availability: [{
@@ -28,6 +30,7 @@ export const products: TProduct[] = [
     }] 
   },
   {
+    id: '3',
     name: 'Leite Integral',
     description: '1L', 
     availability: [{

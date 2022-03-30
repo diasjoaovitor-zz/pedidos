@@ -11,6 +11,7 @@ type Props = {
 export const Card: React.FC<Props> = ({ title, items, children }) => (
   <C sx={{ 
     padding: 2, 
+    paddingBottom: 0,
     marginTop: 2,
     textAlign: 'left', 
     '& a': {

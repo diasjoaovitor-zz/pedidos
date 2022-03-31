@@ -1,10 +1,11 @@
 import { Button, TextField } from "@mui/material"
 import {  Box } from "@mui/system"
-import { useState } from "react"
+import { ChangeEvent, FocusEvent, useState } from "react"
 import { useLocation } from "react-router-dom"
 import { Header } from "../shared/components"
-import { TProduct } from "../shared/types"
+import { TAvailability, TProduct } from "../shared/types"
 import { useAppThemeContext, useProductContext } from "../shared/contexts"
+import { allFieldsAreFilled, removeExcessAvailabilityFields } from "../shared/utils/dynamic-fields"
 
 export const Product: React.FC = () => {
   const { theme } = useAppThemeContext()
@@ -12,18 +13,38 @@ export const Product: React.FC = () => {
   const { pathname } = useLocation()
   const method = pathname.split('/')[2]
   const state = method === 'create' ? {
-    product: {} as TProduct,
     to: '/',
     title: 'Adicionar',
     buttonTitle: 'Adicionar'
   } : {
     to: '/search',
-    product: productContext,
     title: 'Editar',
     buttonTitle: 'Salvar'
   }
   
-  const [ product, setProduct ] = useState<TProduct>(state.product)
+  const [ product, setProduct ] = useState<TProduct>(productContext)
+  const [ availability, setAvailability ] = useState<TAvailability>(productContext.availability)
+
+  const setAvailabilityFields = (availability: TAvailability, allFieldsAreFilled: boolean): void => {
+    if(!allFieldsAreFilled) {
+      availability = removeExcessAvailabilityFields(availability)
+      setAvailability(availability)
+    } else {
+      setAvailability([ ...availability, {
+        brand: '',
+        price: 0,
+        company: ''
+      }])
+    }
+  }
+
+  const handleFocus = (e: FocusEvent<HTMLInputElement>) => e.target.select()
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number): void => {
+    const av = [ ...availability ]
+    av[index] = { ...av[index], [ e.target.name ]: e.target.value }
+    setAvailabilityFields(av, allFieldsAreFilled(av))
+  }
 
   return (
     <>
@@ -52,6 +73,7 @@ export const Product: React.FC = () => {
         variant="outlined" 
         fullWidth
         defaultValue={product.name}
+        onFocus={handleFocus}
       />
       <TextField 
         label="Descrição" 
@@ -61,7 +83,7 @@ export const Product: React.FC = () => {
       />
       </Box>
       <div>
-        {product.availability.map(({ brand, company, price }, i) => (
+        {availability.map(({ brand, company, price }, i) => (
           <Box 
             key={i} 
             component="fieldset" 
@@ -80,13 +102,19 @@ export const Product: React.FC = () => {
               variant="outlined" 
               fullWidth
               defaultValue={brand}
+              name="brand"
+              onFocus={handleFocus}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e, i)}
             />
             <TextField 
               label="Valor" 
               type="number"
               variant="outlined" 
               fullWidth
-              defaultValue={price}
+              defaultValue={price > 0 ? price : ''}
+              name="price"
+              onFocus={handleFocus}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e, i)}
             />
              <TextField 
               label="Empresa" 
@@ -94,6 +122,9 @@ export const Product: React.FC = () => {
               fullWidth
               sx={{ margin: '0 !important' }}
               defaultValue={company}
+              name="company"
+              onFocus={handleFocus}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e, i)}
             />
           </Box>
         ))}

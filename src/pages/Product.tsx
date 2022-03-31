@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom"
 import { Header } from "../shared/components"
 import { TAvailability, TProduct } from "../shared/types"
 import { useAppThemeContext, useProductContext } from "../shared/contexts"
-import { allFieldsAreFilled, removeExcessAvailabilityFields } from "../shared/utils/dynamic-fields"
+import { allFieldsAreFilled, removeExcessAvailabilityFields } from "../shared/functions/dynamic-fields"
 
 export const Product: React.FC = () => {
   const { theme } = useAppThemeContext()
@@ -21,9 +21,10 @@ export const Product: React.FC = () => {
     title: 'Editar',
     buttonTitle: 'Salvar'
   }
-  
-  const [ product, setProduct ] = useState<TProduct>(productContext)
-  const [ availability, setAvailability ] = useState<TAvailability>(productContext.availability)
+  const product = { ...productContext, availability: [
+    ...productContext.availability, { brand: '', price: 0, company: '' }
+  ]}
+  const [ availability, setAvailability ] = useState<TAvailability>(product.availability)
 
   const setAvailabilityFields = (availability: TAvailability, allFieldsAreFilled: boolean): void => {
     if(!allFieldsAreFilled) {
@@ -116,7 +117,7 @@ export const Product: React.FC = () => {
               onFocus={handleFocus}
               onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e, i)}
             />
-             <TextField 
+            <TextField 
               label="Empresa" 
               variant="outlined" 
               fullWidth

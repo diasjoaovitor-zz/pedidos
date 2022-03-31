@@ -1,8 +1,11 @@
 import { Container, IconButton, TextField } from "@mui/material"
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { AddCircle } from '@mui/icons-material';
 import { ReactNode } from "react"
 import { Link } from "react-router-dom"
 import { Header } from "./Header"
+import { useProductContext } from "../contexts"
+import { TProductPresentation } from "../types"
+import { productState } from "../states";
 
 type Props = {
   title: string
@@ -12,6 +15,8 @@ type Props = {
 }
 
 export const Layout: React.FC<Props> = ({ title, children, autoFocus, handleFocus }) => {
+  const { setProductContext, setProductPresentationContext } = useProductContext()
+
   return (
     <>
       <Header title={title} />
@@ -30,15 +35,22 @@ export const Layout: React.FC<Props> = ({ title, children, autoFocus, handleFocu
           onFocus={handleFocus}
         />
         {children}
-        <Link to="product/create" style={{
-          position: 'sticky',
-          bottom: '16px',
-        }}>
+        <Link 
+          to="product/create" 
+          style={{
+            position: 'sticky',
+            bottom: '16px',
+          }}
+          onClick={() => {
+            setProductContext(productState)
+            setProductPresentationContext({} as TProductPresentation)
+          }}
+        >
           <IconButton sx={{ 
             padding: 0,
             color: 'primary.main'
           }}>
-            <AddCircleIcon sx={{
+            <AddCircle sx={{
               fontSize: '3rem',
             }} />
           </IconButton>

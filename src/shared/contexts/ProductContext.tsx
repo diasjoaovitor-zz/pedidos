@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react"
+import { productState } from "../states"
 import { TProduct, TProductPresentation } from "../types"
 
 interface IProduct {
@@ -13,7 +14,7 @@ const ProductContext = createContext({} as IProduct)
 export const useProductContext = () => useContext(ProductContext)
 
 export const ProductProvider: React.FC = ({ children }) => {
-  const [ product, setProduct ] = useState<TProduct>({} as TProduct)
+  const [ product, setProduct ] = useState<TProduct>(productState)
   const [ productPresentation, setProductPresentation ] = useState<TProductPresentation>({} as TProductPresentation)
 
   return (

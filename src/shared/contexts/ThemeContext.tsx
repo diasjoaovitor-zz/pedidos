@@ -1,27 +1,24 @@
 import { createContext, useCallback, useContext, useMemo, useState } from "react"
 import { ThemeProvider } from '@emotion/react'
-import { Theme as T } from '@mui/material'
+import { Theme } from '@mui/material'
 import { Box } from "@mui/material"
 import CssBaseline from '@mui/material/CssBaseline'
 import { darkTheme, lightTheme } from "../themes"
 
-type Theme = 'light' | 'dark' 
-
-interface IThemeContextData {
-  themeName: Theme
+type TThemeContext = {
   toggleTheme: () => void
-  theme: T
+  theme: Theme
 }
 
-const ThemeContext = createContext({} as IThemeContextData)
+const ThemeContext = createContext({} as TThemeContext)
 
 export const useAppThemeContext = () => useContext(ThemeContext)
 
 export const AppThemeProvider: React.FC = ({ children }) => {
-  const [ themeName, setTheme ] = useState<Theme>('dark')
+  const [ themeName, setThemeName ] = useState<'light' | 'dark'>('dark')
 
   const toggleTheme = useCallback(() => {
-    setTheme(theme => theme === 'dark' ? 'light' : 'dark')
+    setThemeName(theme => theme === 'dark' ? 'light' : 'dark')
   }, [])
 
   const theme = useMemo(() => {
@@ -29,7 +26,7 @@ export const AppThemeProvider: React.FC = ({ children }) => {
   }, [themeName])
 
   return (
-    <ThemeContext.Provider value={{ themeName, toggleTheme, theme }}>
+    <ThemeContext.Provider value={{ toggleTheme, theme }}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Box 

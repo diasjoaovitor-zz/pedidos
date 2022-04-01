@@ -1,11 +1,13 @@
 import { Router } from './Router'
-import { ProductProvider, AppThemeProvider } from './shared/contexts'
+import { ProductProvider, AppThemeProvider, AuthProvider } from './shared/contexts'
 
 const App: React.FC = () => (
   <AppThemeProvider>
-    <ProductProvider>
-      <Router />
-    </ProductProvider>
+    <AuthProvider>
+      <ProductProvider>
+        <Router />
+      </ProductProvider>
+    </AuthProvider>
   </AppThemeProvider>
 )
 

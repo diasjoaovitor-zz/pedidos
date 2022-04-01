@@ -1,12 +1,20 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Home, Product, Search } from './pages'
+import { PrivateRoute } from './shared/contexts'
+import { Auth, Home, Product, Search } from './pages'
 
 export const Router: React.FC = () => (
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/product/:method" element={<Product />} />
-      <Route path="/search" element={<Search />} />
+      <Route path="/auth" element={<Auth />} />
+      <Route path="/" element={<PrivateRoute />}>
+        <Route path="/" element={<Home />} />
+      </Route>
+      <Route path="/product/:method" element={<PrivateRoute />}>
+        <Route path="/product/:method" element={<Product />} />
+      </Route>
+      <Route path="/search" element={<PrivateRoute />}>
+        <Route path="/search" element={<Search />} />
+      </Route>
     </Routes>
   </BrowserRouter>
 )

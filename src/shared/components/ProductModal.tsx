@@ -16,7 +16,7 @@ export const ProductModal: React.FC<Props> = ({ product, closeModal, handleUpdat
   return (
     <Box
       sx={{
-        position: 'absolute',
+        position: 'fixed',
         top: 0,
         left: 0,
         height: '100%',

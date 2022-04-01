@@ -9,8 +9,8 @@ type Props = {
 }
 
 export const Chip: React.FC<Props> = ({ chips, handleDelete, handleSubmit }) => {
-  const [ focus, setFocus ] = useState<boolean>(false)
-  const [ color, setColor ] = useState<string>('#fff')
+  const [ focus, setFocus ] = useState(false)
+  const [ color, setColor ] = useState('#fff')
 
   useEffect(() => {
     setColor(!focus ? '#fff' : 'primary.main')

@@ -24,7 +24,7 @@ export const Product: React.FC = () => {
   const product = { ...productContext, availability: [
     ...productContext.availability, { brand: '', price: 0, company: '' }
   ]}
-  const [ availability, setAvailability ] = useState<TAvailability>(product.availability)
+  const [ availability, setAvailability ] = useState(product.availability)
 
   const setAvailabilityFields = (availability: TAvailability, allFieldsAreFilled: boolean): void => {
     if(!allFieldsAreFilled) {

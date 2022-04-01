@@ -2,20 +2,20 @@ import { createContext, useContext, useState } from "react"
 import { productState } from "../states"
 import { TProduct, TProductPresentation } from "../types"
 
-interface IProduct {
+type TProductContext = {
   productContext: TProduct
   productPresentationContext: TProductPresentation
   setProductContext(product: TProduct): void
   setProductPresentationContext(product: TProductPresentation): void
 }
 
-const ProductContext = createContext({} as IProduct)
+const ProductContext = createContext({} as TProductContext)
 
 export const useProductContext = () => useContext(ProductContext)
 
 export const ProductProvider: React.FC = ({ children }) => {
-  const [ product, setProduct ] = useState<TProduct>(productState)
-  const [ productPresentation, setProductPresentation ] = useState<TProductPresentation>({} as TProductPresentation)
+  const [ product, setProduct ] = useState(productState)
+  const [ productPresentation, setProductPresentation ] = useState({} as TProductPresentation)
 
   return (
     <ProductContext.Provider 

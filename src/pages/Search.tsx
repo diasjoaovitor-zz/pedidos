@@ -2,9 +2,9 @@ import { FormEvent, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Divider, List, ListItem, Typography } from "@mui/material"
 import { Card, Chip, Layout, ProductModal } from "../shared/components"
-import { TProduct, TProductPresentation } from "../shared/types"
+import { TProductPresentation } from "../shared/types"
 import { products as p } from "../shared/repositories/products"
-import { getElementValues } from "../shared/utils"
+import { getElementValues } from "../shared/functions"
 import { useProductContext } from "../shared/contexts"
 
 export const Search: React.FC = () => {
@@ -14,11 +14,11 @@ export const Search: React.FC = () => {
   } = useProductContext()
   const { state: chip } = useLocation()
   const navigate = useNavigate()
-  const [ productPresentation, setProductPresentation ] = useState<TProductPresentation>(productPresentationContext)
-  const [ products, setProducts ] = useState<TProduct[]>(p)
+  const [ productPresentation, setProductPresentation ] = useState(productPresentationContext)
+  const [ products, setProducts ] = useState(p)
   const [ companies, setCompanies ] = useState<string[]>([])
   const [ chips, setChips ] = useState<string[]>(chip ? [chip as string] : [])
-  const [ modal, setModal ] = useState<boolean>(Object.keys(productPresentationContext).length !== 0)
+  const [ modal, setModal ] = useState(Object.keys(productPresentationContext).length !== 0)
 
   const formatProductsPresentation = (): TProductPresentation[] => {
     let presentation: any = []

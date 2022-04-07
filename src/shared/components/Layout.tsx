@@ -36,7 +36,7 @@ export const Layout: React.FC<Props> = ({ title, children, autoFocus, handleFocu
         />
         {children}
         <Link 
-          to="product/create" 
+          to="/product/create" 
           style={{
             position: 'sticky',
             bottom: '16px',

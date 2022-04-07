@@ -7,9 +7,5 @@ export const productState: TProduct =  {
     brand: '',
     price: 0,
     company: ''
-  }, {
-    brand: '',
-    price: 0,
-    company: ''
   }]
 }

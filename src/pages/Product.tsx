@@ -1,11 +1,11 @@
 import { Button, TextField } from "@mui/material"
 import {  Box } from "@mui/system"
-import { ChangeEvent, FocusEvent, useState } from "react"
+import { ChangeEvent, useState } from "react"
 import { useLocation } from "react-router-dom"
 import { Header } from "../shared/components"
-import { TAvailability, TProduct } from "../shared/types"
+import { TAvailability } from "../shared/types"
 import { useAppThemeContext, useProductContext } from "../shared/contexts"
-import { allFieldsAreFilled, removeExcessAvailabilityFields } from "../shared/functions/dynamic-fields"
+import { allFieldsAreFilled, handleFocus, removeExcessAvailabilityFields } from "../shared/functions"
 
 export const Product: React.FC = () => {
   const { theme } = useAppThemeContext()
@@ -39,8 +39,6 @@ export const Product: React.FC = () => {
     }
   }
 
-  const handleFocus = (e: FocusEvent<HTMLInputElement>) => e.target.select()
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number): void => {
     const av = [ ...availability ]
     av[index] = { ...av[index], [ e.target.name ]: e.target.value }
@@ -70,7 +68,6 @@ export const Product: React.FC = () => {
       <Box component="section">
       <TextField 
         label="Produto" 
-        id="outlined-basic"
         variant="outlined" 
         fullWidth
         defaultValue={product.name}

@@ -1,4 +1,5 @@
 export { Home } from './Home'
 export { Product } from './Product'
 export { Search } from './Search'
-export { Auth } from './Auth'
+export { Login } from './Login'
+export { Register } from './Register'

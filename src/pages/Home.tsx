@@ -1,36 +1,43 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Layout, Card, Loader }from "../shared/components"
-import { products as p } from "../shared/repositories/products"
+import { useAuthContext, useProductContext } from "../shared/contexts"
+import { getCompanies, getProductNames } from "../shared/functions"
+import { read } from "../shared/services/firestore"
 
 export const Home: React.FC = () => {
   const navigate = useNavigate()
-  const [ companies, setCompanies ] = useState<string[]>([])
-  const [ products, setProducts ] = useState<string[]>([])
-  const [ loader, setLoader ] = useState(true)
+  const { user } = useAuthContext()
+  const { updateData, setUpdateData, productsContext, setProductsContext } = useProductContext()
+  const [ productNames, setProductNames ] = useState<string[]>(getProductNames(productsContext))
+  const [ companies, setCompanies ] = useState<string[]>(getCompanies(productsContext))
+  const [ loader, setLoader ] = useState(false)
 
   useEffect(() => {
-    try {
-      const companies: string[] = []
-      p.forEach(({ availability }) => {
-        availability.forEach(({ company }) => {
-          companies.push(company)
-        })
-      })
-      const products = p.map(({ name }) => name)
-      setCompanies(companies)
-      setProducts(products)
-    } catch (error) {
-      alert('ops')
-    } finally {
-      setLoader(false)
+    if(updateData) {
+      (async () => {
+        setLoader(true)
+        try {
+          const products = await read(user!.uid)
+          const companies = getCompanies(products)
+          setCompanies(companies)
+          setProductNames(getProductNames(products))
+          setProductsContext(products)
+          setUpdateData(false)
+        } catch (error) {
+          console.log(error)
+          alert('Algo deu errado')
+        } finally {
+          setLoader(false)
+        }
+      })()
     }
   }, [])
 
   return (
     <Layout title="Pedidos" handleFocus={() => navigate('/search')}>
       <Card title="Empresas" items={companies} />
-      <Card title="Produtos" items={products} />
+      <Card title="Produtos" items={productNames} />
       {loader && <Loader />}
     </Layout>
   )

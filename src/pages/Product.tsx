@@ -1,31 +1,37 @@
 import { Button, TextField } from "@mui/material"
 import {  Box } from "@mui/system"
-import { ChangeEvent, useState } from "react"
-import { useLocation } from "react-router-dom"
-import { Header } from "../shared/components"
-import { TAvailability } from "../shared/types"
-import { useAppThemeContext, useProductContext } from "../shared/contexts"
-import { allFieldsAreFilled, handleFocus, removeExcessAvailabilityFields } from "../shared/functions"
+import { ChangeEvent, FormEvent, useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
+import { Header, Loader } from "../shared/components"
+import { TAvailability, TProduct } from "../shared/types"
+import { useAppThemeContext, useAuthContext, useProductContext } from "../shared/contexts"
+import { allFieldsAreFilled, getElementValues, handleFocus, removeEmptyFields, removeExcessAvailabilityFields } from "../shared/functions"
+import { create, update } from "../shared/services/firestore"
 
 export const Product: React.FC = () => {
   const { theme } = useAppThemeContext()
-  const { productContext } = useProductContext()
+  const { setUpdateData, productContext } = useProductContext()
+  const { user } = useAuthContext()
   const { pathname } = useLocation()
+  const navigate = useNavigate()
   const method = pathname.split('/')[2]
   const state = method === 'create' ? {
     to: '/',
     title: 'Adicionar',
-    buttonTitle: 'Adicionar'
+    buttonTitle: 'Adicionar',
+    submit: async (product: TProduct) => create(product)
   } : {
     to: '/search',
     title: 'Editar',
-    buttonTitle: 'Salvar'
+    buttonTitle: 'Salvar',
+    submit: async (product: TProduct) => update(product)
   }
   const product = { ...productContext, availability: [
     ...productContext.availability, { brand: '', price: 0, company: '' }
   ]}
   const [ availability, setAvailability ] = useState(product.availability)
-
+  const [ loader, setLoader ] = useState(false)
+  
   const setAvailabilityFields = (availability: TAvailability, allFieldsAreFilled: boolean): void => {
     if(!allFieldsAreFilled) {
       availability = removeExcessAvailabilityFields(availability)
@@ -43,6 +49,26 @@ export const Product: React.FC = () => {
     const av = [ ...availability ]
     av[index] = { ...av[index], [ e.target.name ]: e.target.value }
     setAvailabilityFields(av, allFieldsAreFilled(av))
+  }
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+    e.preventDefault()
+    const [ name, description, ] = getElementValues(e, ['name', 'description'])
+    const data = { 
+      ref: user!.uid, 
+      name, 
+      description, 
+      availability: removeEmptyFields(availability) 
+    }
+    setLoader(true)
+    try {
+      await state.submit(data)
+      setUpdateData(true)
+      navigate('/')
+    } catch (error) {
+      setLoader(false)
+      alert('Erro ao submeter formulário')
+    }
   }
 
   return (
@@ -64,16 +90,20 @@ export const Product: React.FC = () => {
           overflowX: 'auto'
         }
       }}
+      onSubmit={handleSubmit}
     >
       <Box component="section">
       <TextField 
+        name="name"
         label="Produto" 
         variant="outlined" 
         fullWidth
+        required
         defaultValue={product.name}
         onFocus={handleFocus}
       />
       <TextField 
+        name="description"
         label="Descrição" 
         variant="outlined" 
         fullWidth
@@ -81,56 +111,64 @@ export const Product: React.FC = () => {
       />
       </Box>
       <div>
-        {availability.map(({ brand, company, price }, i) => (
-          <Box 
-            key={i} 
-            component="fieldset" 
-            borderRadius={1}
-            padding={2}
-            marginRight={2}
-            sx={{ 
-              minWidth: '85%',
-              '&:last-of-type': {
-                marginRight: 0
-              } 
-            }}
-          >
-            <TextField 
-              label="Marca" 
-              variant="outlined" 
-              fullWidth
-              defaultValue={brand}
-              name="brand"
-              onFocus={handleFocus}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e, i)}
-            />
-            <TextField 
-              label="Valor" 
-              type="number"
-              variant="outlined" 
-              fullWidth
-              defaultValue={price > 0 ? price : ''}
-              name="price"
-              onFocus={handleFocus}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e, i)}
-            />
-            <TextField 
-              label="Empresa" 
-              variant="outlined" 
-              fullWidth
-              sx={{ margin: '0 !important' }}
-              defaultValue={company}
-              name="company"
-              onFocus={handleFocus}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e, i)}
-            />
-          </Box>
-        ))}
+        {availability.map(({ brand, company, price }, i) => {
+          const required = i === 0
+          return (
+            <Box 
+              key={i} 
+              component="fieldset" 
+              borderRadius={1}
+              padding={2}
+              marginRight={2}
+              sx={{ 
+                minWidth: '85%',
+                '&:last-of-type': {
+                  marginRight: 0
+                } 
+              }}
+            >
+              <TextField 
+                label="Marca" 
+                variant="outlined" 
+                fullWidth
+                defaultValue={brand}
+                name="brand"
+                required={required}
+                onFocus={handleFocus}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e, i)}
+              />
+              <TextField 
+                label="Valor" 
+                type="number"
+                variant="outlined" 
+                fullWidth
+                defaultValue={price > 0 ? price : ''}
+                inputProps={{ step: 'any', min: '0' }}
+                name="price"
+                required={required}
+                onFocus={handleFocus}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e, i)}
+              />
+              <TextField 
+                label="Empresa" 
+                variant="outlined" 
+                fullWidth
+                sx={{ margin: '0 !important' }}
+                defaultValue={company}
+                name="company"
+                required={required}
+                onFocus={handleFocus}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e, i)}
+              />
+            </Box>
+          )
+        })}
       </div>
-      <Button variant="contained" fullWidth sx={{ marginTop: 4 }}>
+      <Button type="submit" variant="contained" fullWidth sx={{ marginTop: 4 }}>
         {state.buttonTitle}
       </Button>
     </Box>
+    {loader && <Loader />}
     </>
   )
 }

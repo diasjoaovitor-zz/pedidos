@@ -16,3 +16,9 @@ export const removeExcessAvailabilityFields = (availability: TAvailability): TAv
     company: ''
   } ]: availability
 }
+
+export const removeEmptyFields = (availability: TAvailability): TAvailability => {
+  return availability.filter(({ brand, price, company }) => (
+    brand && price > 0 && company
+  ))
+}

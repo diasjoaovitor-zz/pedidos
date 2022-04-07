@@ -1,6 +1,6 @@
 import { ReactNode } from "react"
 import { Link } from "react-router-dom"
-import { Card as C, Typography, List, ListItem, Divider } from "@mui/material"
+import { Card as C, List, ListItem, Divider } from "@mui/material"
 import { Title } from "./"
 
 type Props = {
@@ -27,16 +27,22 @@ export const Card: React.FC<Props> = ({ title, items, children }) => (
     </Title>
     <List>
       <Divider />
-      {!children ? items && items.map((item, i) => (
-        <div key={i}>
-          <ListItem>
-            <Link to="/search" state={item}>
-              {item}
-            </Link>
-          </ListItem>
-          <Divider />
-        </div>
-      )) : children}
+      {!children ? items && 
+        items.length > 0 ? items.map((item, i) => (
+          <div key={i}>
+            <ListItem>
+              <Link to="/search" state={item}>
+                {item}
+              </Link>
+            </ListItem>
+            <Divider />
+          </div>
+        )) : <p>{
+            title === 'Empresas' ? 
+              'Nenhuma empresa encontrada' :
+              'Nenhum produto encontrado'
+          }</p>
+      : children}
     </List>
   </C>
 )

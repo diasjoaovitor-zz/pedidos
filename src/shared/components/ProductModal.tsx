@@ -1,8 +1,12 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Button, Card, Divider, IconButton, Stack, Toolbar, Typography } from "@mui/material";
 import { TProductPresentation } from "../types";
-import { useAppThemeContext } from "../contexts";
+import { useAppThemeContext, useProductContext } from "../contexts";
 import { Title } from "./";
+import { destroy } from '../services/firestore';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Loader } from './Loader';
 
 type Props = {
   product: TProductPresentation
@@ -11,7 +15,10 @@ type Props = {
 }
 
 export const ProductModal: React.FC<Props> = ({ product, closeModal, handleUpdate }) => {
+  const navigate = useNavigate()
   const { theme } = useAppThemeContext()
+  const { setUpdateData } = useProductContext()
+  const [ loader, setLoader ] = useState(false)
  
   return (
     <Box
@@ -95,11 +102,22 @@ export const ProductModal: React.FC<Props> = ({ product, closeModal, handleUpdat
           <Button variant="contained" fullWidth onClick={() => handleUpdate(product.id)}>
             Editar
           </Button>
-          <Button variant="contained" color="error" fullWidth>
+          <Button variant="contained" color="error" fullWidth onClick={async () => {
+            setLoader(true)
+            try {
+              await destroy(product.id)
+              setUpdateData(true)
+              navigate('/')
+            } catch (error) {
+              alert('Algo deu errado')
+              setLoader(false)
+            }
+          }}>
             Excluir
           </Button>
         </Stack>
       </Card>
+      {loader && <Loader />}
     </Box>
   )
 }

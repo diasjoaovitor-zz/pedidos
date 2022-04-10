@@ -28,11 +28,17 @@ export const Chip: React.FC<Props> = ({ chips, handleDelete, handleSubmit }) => 
         borderBottom: 1,
         borderColor: color,
         textAlign: 'left',
-        '& input': {
+        '& .MuiInput-root': {
+          width: '100%',
+          flex: 1
+        },
+        '& .MuiInput-input': {
           backgroundColor: '#fff0',
           border: 'none',
           outline: 'none',
-          color: '#fff' 
+          color: '#fff',
+          width: '100%',
+          minWidth: '160px'
         } 
       }}
       onSubmit={handleSubmit}
@@ -40,7 +46,7 @@ export const Chip: React.FC<Props> = ({ chips, handleDelete, handleSubmit }) => 
       <FormLabel sx={{ color, fontSize: 12 }}>Filtros</FormLabel>
       <Stack direction="row" alignItems="center" flexWrap="wrap">
         {chips.map((chip, i) => (
-          <C key={i} label={chip} sx={{ margin: .5 }} onDelete={() => handleDelete(i)} />
+          <C key={i} label={chip} sx={{ display: 'flex', margin: .5 }} onDelete={() => handleDelete(i)} />
         ))}
         <InputUnstyled 
           name="chip"

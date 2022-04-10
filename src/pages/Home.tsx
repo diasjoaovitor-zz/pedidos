@@ -24,8 +24,8 @@ export const Home: React.FC = () => {
           setProductNames(getProductNames(products))
           setProductsContext(products)
           setUpdateData(false)
-        } catch (error) {
-          console.log(error)
+        } catch (error: any) {
+          console.log(error.code)
           alert('Algo deu errado')
         } finally {
           setLoader(false)

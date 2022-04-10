@@ -5,6 +5,7 @@ import { Card, Chip, Layout, ProductModal } from "../shared/components"
 import { getCompanies, getElementValues, getProductsPresentation } from "../shared/functions"
 import { useProductContext } from "../shared/contexts"
 import { search } from "../shared/functions/search"
+import { TProductPresentation } from "../shared/types"
 
 export const Search: React.FC = () => {
   const navigate = useNavigate()
@@ -104,7 +105,10 @@ export const Search: React.FC = () => {
         <ProductModal 
           product={productPresentation} 
           handleUpdate={navigateToUpdate} 
-          closeModal={() => setModal(false)} 
+          closeModal={() => {
+            setProductPresentationContext({} as TProductPresentation)
+            setModal(false)
+          }} 
         />
       }
     </Layout>

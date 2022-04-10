@@ -22,14 +22,23 @@ export const Search: React.FC = () => {
   const [ modal, setModal ] = useState(Object.keys(productPresentationContext).length !== 0)
 
   useEffect(() => {
+    const presentation = getProductsPresentation(productsContext)
+    setCompanies(
+      search(chips, presentation).map(({ company }) => company)
+    )
     setProductsPresentation(
-      search(chips, getProductsPresentation(productsContext))
+      search(chips, presentation)
     )
   }, [chips])
 
   const handleDynamicSearch = (e: ChangeEvent<HTMLInputElement>): void => {
+    const { value } = e.currentTarget
+    const presentation = getProductsPresentation(productsContext)
+    setCompanies(
+      search([value], presentation).map(({ company }) => company)
+    )
     setProductsPresentation(
-      search([e.currentTarget.value], getProductsPresentation(productsContext))
+      search([value], presentation)
     )
   }
 

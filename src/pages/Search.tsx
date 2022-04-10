@@ -1,9 +1,10 @@
-import { FormEvent, useState } from "react"
+import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Divider, ListItem, Typography } from "@mui/material"
 import { Card, Chip, Layout, ProductModal } from "../shared/components"
 import { getCompanies, getElementValues, getProductsPresentation } from "../shared/functions"
 import { useProductContext } from "../shared/contexts"
+import { search } from "../shared/functions/search"
 
 export const Search: React.FC = () => {
   const navigate = useNavigate()
@@ -13,12 +14,24 @@ export const Search: React.FC = () => {
     productsContext,
     productPresentationContext, setProductPresentationContext 
   } = useProductContext()
-  const productsPresentation = getProductsPresentation(productsContext)
+  const [ productsPresentation, setProductsPresentation ] = useState(getProductsPresentation(productsContext))
   const [ productPresentation, setProductPresentation ] = useState(productPresentationContext)
   const [ products, setProducts ] = useState(productsContext)
   const [ companies, setCompanies ] = useState<string[]>(getCompanies(productsContext))
   const [ chips, setChips ] = useState<string[]>(chip ? [chip as string] : [])
   const [ modal, setModal ] = useState(Object.keys(productPresentationContext).length !== 0)
+
+  useEffect(() => {
+    setProductsPresentation(
+      search(chips, getProductsPresentation(productsContext))
+    )
+  }, [chips])
+
+  const handleDynamicSearch = (e: ChangeEvent<HTMLInputElement>): void => {
+    setProductsPresentation(
+      search([e.currentTarget.value], getProductsPresentation(productsContext))
+    )
+  }
 
   const addChip = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
@@ -38,48 +51,46 @@ export const Search: React.FC = () => {
   }
 
   return (
-    <Layout title="Pesquisa" autoFocus={true}>
+    <Layout title="Pesquisa" autoFocus={true} handleChange={handleDynamicSearch}>
       <Chip 
         chips={chips} 
         handleSubmit={addChip}
         handleDelete={removeChip} 
       />
-      {<Card title="Empresas" items={companies} />}
-      {products.length >= 0 && 
-        <Card title="Produtos">
-          {productsPresentation.length > 0 ? productsPresentation.map((product, i) => (
-            <div key={i}>
-              <ListItem 
-                sx={{ 
-                  justifyContent: 'space-between', 
-                  paddingX: 0, 
-                  cursor: 'pointer' 
-                }}
-                onClick={() => {
-                  setProductPresentation(product)
-                  setModal(true)
-                }}
-              >
-                <div>
-                  <Typography variant="inherit" component="h3">
-                    {product.name}
-                  </Typography>
-                  <Typography variant="subtitle1" component="p">
-                    {product.brand} - {product.description}
-                  </Typography>
-                  <Typography variant="subtitle2" component="p">
-                    Vendido por: {product.company}
-                  </Typography>
-                </div>
-                <Typography variant="h5" component="strong" fontWeight="bold" textAlign="right">
-                  {product.price}
+      <Card title="Empresas" items={companies} />
+      <Card title="Produtos">
+        {productsPresentation.length > 0 ? productsPresentation.map((product, i) => (
+          <div key={i}>
+            <ListItem 
+              sx={{ 
+                justifyContent: 'space-between', 
+                paddingX: 0, 
+                cursor: 'pointer' 
+              }}
+              onClick={() => {
+                setProductPresentation(product)
+                setModal(true)
+              }}
+            >
+              <div>
+                <Typography variant="inherit" component="h3">
+                  {product.name}
                 </Typography>
-              </ListItem>
-              <Divider />
-            </div>
-          )): <p>Nenhum produto encontrado</p>}
-        </Card>
-      }
+                <Typography variant="subtitle1" component="p">
+                  {product.brand} - {product.description}
+                </Typography>
+                <Typography variant="subtitle2" component="p">
+                  Vendido por: {product.company}
+                </Typography>
+              </div>
+              <Typography variant="h5" component="strong" fontWeight="bold" textAlign="right">
+                {product.price}
+              </Typography>
+            </ListItem>
+            <Divider />
+          </div>
+        )): <ListItem>Nenhum produto encontrado</ListItem>}
+      </Card>
       {modal && productPresentation && 
         <ProductModal 
           product={productPresentation} 

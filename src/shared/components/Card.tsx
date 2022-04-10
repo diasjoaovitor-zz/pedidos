@@ -12,7 +12,7 @@ type Props = {
 export const Card: React.FC<Props> = ({ title, items, children }) => (
   <C sx={{ 
     padding: 2, 
-    paddingBottom: 0,
+    paddingBottom: 1,
     marginTop: 2,
     textAlign: 'left', 
     '& a': {
@@ -25,7 +25,7 @@ export const Card: React.FC<Props> = ({ title, items, children }) => (
         {title}
       </Link>
     </Title>
-    <List>
+    <List sx={{ '& .MuiDivider-root': { backgroundColor: 'gray'}}}>
       <Divider />
       {!children ? items && 
         items.length > 0 ? items.map((item, i) => (
@@ -37,11 +37,11 @@ export const Card: React.FC<Props> = ({ title, items, children }) => (
             </ListItem>
             <Divider />
           </div>
-        )) : <p>{
+        )) : <ListItem>{
             title === 'Empresas' ? 
               'Nenhuma empresa encontrada' :
               'Nenhum produto encontrado'
-          }</p>
+          }</ListItem>
       : children}
     </List>
   </C>

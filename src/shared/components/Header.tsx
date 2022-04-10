@@ -1,25 +1,8 @@
-import { Link, useLocation } from "react-router-dom"
-import { Container, IconButton, Toolbar, Typography } from "@mui/material"
-import { useAppThemeContext } from "../contexts"
-import { Lightbulb, ArrowBack } from "@mui/icons-material"
-
-const ToggleTheme: React.FC = () => {
-  const { toggleTheme } = useAppThemeContext()
-
-  return (
-    <IconButton onClick={toggleTheme} sx={{ color: 'background.default' }}>
-      <Lightbulb />
-    </IconButton>
-  )
-}
-
-const GoBack: React.FC<{to?: string}> = ({ to }) => (
-  <Link to={to || '/'}>
-    <IconButton sx={{ color: 'background.default' }} >
-      <ArrowBack />
-    </IconButton>
-  </Link>
-)
+import { useLocation } from "react-router-dom"
+import { Container, Toolbar, Typography } from "@mui/material"
+import { Menu } from "./Menu"
+import { ToggleTheme } from "./ToggleTheme"
+import { GoBack } from "./GoBack"
 
 export const Header: React.FC<{ title: string, to?: string }> = ({ title, to }) => {
   const { pathname } = useLocation()
@@ -42,7 +25,13 @@ export const Header: React.FC<{ title: string, to?: string }> = ({ title, to }) 
         <Typography variant="h6" component="h1">
           {title}
         </Typography>
-        {pathname !== '/' ? <GoBack to={to} /> : <ToggleTheme />}
+        {pathname !== '/' ? 
+          <GoBack to={to} /> :
+          <Toolbar sx={{ padding: 0 }}>
+            <ToggleTheme />
+            <Menu />
+          </Toolbar>
+        }
       </Container>
     </Toolbar> 
   )

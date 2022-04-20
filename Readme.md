@@ -12,7 +12,7 @@ Sistema para controle de pedidos em pequenas empresas
 
 ## Como rodar o projeto
 
-Voce pode testar o [projeto em produção](https://6253518bcaf7594324c4aa42--gleaming-faloodeh-3ad184.netlify.app/) acessando com:
+Voce pode testar o [projeto em produção](https://gleaming-faloodeh-3ad184.netlify.app//) acessando com:
 
 Email:
 

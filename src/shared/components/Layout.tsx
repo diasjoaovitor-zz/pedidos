@@ -1,6 +1,6 @@
 import { Container, IconButton, TextField } from "@mui/material"
 import { AddCircle } from '@mui/icons-material';
-import { ChangeEvent, ReactNode } from "react"
+import { ChangeEvent, KeyboardEvent, ReactNode } from "react"
 import { Link } from "react-router-dom"
 import { Header } from "./Header"
 import { useProductContext } from "../contexts"
@@ -13,9 +13,10 @@ type Props = {
   autoFocus?: boolean
   handleFocus?: () => void
   handleChange?: (e: ChangeEvent<HTMLInputElement>) => void
+  handleKey?: (e: KeyboardEvent<HTMLInputElement>) => void
 }
 
-export const Layout: React.FC<Props> = ({ title, children, autoFocus, handleFocus, handleChange }) => {
+export const Layout: React.FC<Props> = ({ title, children, autoFocus, handleFocus, handleChange, handleKey }) => {
   const { setProductContext, setProductPresentationContext } = useProductContext()
 
   return (
@@ -35,6 +36,7 @@ export const Layout: React.FC<Props> = ({ title, children, autoFocus, handleFocu
           autoFocus={autoFocus}
           onFocus={handleFocus}
           onChange={handleChange}
+          onKeyDown={handleKey}
         />
         {children}
         <Link 

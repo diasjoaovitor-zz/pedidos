@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react"
+import { FormEvent, useEffect, useState, KeyboardEvent } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Divider, ListItem, Typography } from "@mui/material"
 import { Card, Chip, Layout, ProductModal } from "../shared/components"
@@ -32,8 +32,7 @@ export const Search: React.FC = () => {
     )
   }, [chips])
 
-  const handleDynamicSearch = (e: ChangeEvent<HTMLInputElement>): void => {
-    const { value } = e.currentTarget
+  const handleDynamicSearch = (value: string): void => {
     const presentation = getProductsPresentation(productsContext)
     setCompanies(
       search([value], presentation).map(({ company }) => company)
@@ -41,6 +40,12 @@ export const Search: React.FC = () => {
     setProductsPresentation(
       search([value], presentation)
     )
+  }
+
+  const handleKey = (e: KeyboardEvent<HTMLInputElement>): void => {
+    if(e.key === 'Enter') {
+      handleDynamicSearch(e.currentTarget.querySelector('input')!.value)
+    }
   }
 
   const addChip = (e: FormEvent<HTMLFormElement>): void => {
@@ -61,7 +66,12 @@ export const Search: React.FC = () => {
   }
 
   return (
-    <Layout title="Pesquisa" autoFocus={true} handleChange={handleDynamicSearch}>
+    <Layout 
+      title="Pesquisa" 
+      autoFocus={true} 
+      handleChange={e => handleDynamicSearch(e.currentTarget.value)} 
+      handleKey={handleKey}
+    >
       <Chip 
         chips={chips} 
         handleSubmit={addChip}

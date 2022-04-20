@@ -36,7 +36,7 @@ export const ProductModal: React.FC<Props> = ({ product, closeModal, handleUpdat
         padding: 4
       }}
     >
-      <Card component="form" sx={{ width: '100%', padding: 2 }}>
+      <Card component="form" sx={{ width: '100%', maxWidth: 'sm',  padding: 2 }}>
         <Toolbar 
           component="header" 
           sx={{ 

@@ -20,7 +20,7 @@ export const Auth: React.FC<Props> = ({ children, title, to, handleSubmit }) => 
         alignItems: 'center',
         justifyContent: 'center',
         height: '100vh',
-        maxWidth: '360px',
+        maxWidth: 'sm',
         padding: 4,
         '& .MuiOutlinedInput-root': {
           marginBottom: 1,

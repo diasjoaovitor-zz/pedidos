@@ -1,5 +1,4 @@
-import { Button, TextField } from "@mui/material"
-import {  Box } from "@mui/system"
+import { Button, Container, TextField, Box } from "@mui/material"
 import { ChangeEvent, FormEvent, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Header, Loader } from "../shared/components"
@@ -79,94 +78,95 @@ export const Product: React.FC = () => {
       flex={1}
       sx={{
         backgroundColor: theme.palette.background.paper,
-        borderRadius: 1,
         paddingX: 2,
         paddingY: 4,
         '& .MuiTextField-root': {
           marginBottom: 4,
         },
-        '& > div': {
+        '& .availability': {
           display: 'flex',
           overflowX: 'auto'
         }
       }}
       onSubmit={handleSubmit}
     >
-      <Box component="section">
-      <TextField 
-        name="name"
-        label="Produto" 
-        variant="outlined" 
-        fullWidth
-        required
-        defaultValue={product.name}
-        onFocus={handleFocus}
-      />
-      <TextField 
-        name="description"
-        label="Descrição" 
-        variant="outlined" 
-        fullWidth
-        defaultValue={product.description}
-      />
-      </Box>
-      <div>
-        {availability.map(({ brand, company, price }, i) => {
-          const required = i === 0
-          return (
-            <Box 
-              key={i} 
-              component="fieldset" 
-              borderRadius={1}
-              padding={2}
-              marginRight={2}
-              sx={{ 
-                minWidth: '85%',
-                '&:last-of-type': {
-                  marginRight: 0
-                } 
-              }}
-            >
-              <TextField 
-                label="Marca" 
-                variant="outlined" 
-                fullWidth
-                defaultValue={brand}
-                name="brand"
-                required={required}
-                onFocus={handleFocus}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e, i)}
-              />
-              <TextField 
-                label="Valor" 
-                type="number"
-                variant="outlined" 
-                fullWidth
-                defaultValue={price > 0 ? price : ''}
-                inputProps={{ step: 'any', min: '0' }}
-                name="price"
-                required={required}
-                onFocus={handleFocus}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e, i)}
-              />
-              <TextField 
-                label="Empresa" 
-                variant="outlined" 
-                fullWidth
-                sx={{ margin: '0 !important' }}
-                defaultValue={company}
-                name="company"
-                required={required}
-                onFocus={handleFocus}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e, i)}
-              />
-            </Box>
-          )
-        })}
-      </div>
-      <Button type="submit" variant="contained" fullWidth sx={{ marginTop: 4 }}>
-        {state.buttonTitle}
-      </Button>
+      <Container>
+        <Box component="section">
+          <TextField 
+            name="name"
+            label="Produto" 
+            variant="outlined" 
+            fullWidth
+            required
+            defaultValue={product.name}
+            onFocus={handleFocus}
+          />
+          <TextField 
+            name="description"
+            label="Descrição" 
+            variant="outlined" 
+            fullWidth
+            defaultValue={product.description}
+          />
+        </Box>
+        <div className="availability">
+          {availability.map(({ brand, company, price }, i) => {
+            const required = i === 0
+            return (
+              <Box 
+                key={i} 
+                component="fieldset" 
+                borderRadius={1}
+                padding={2}
+                marginRight={2}
+                sx={{ 
+                  minWidth: '85%',
+                  '&:last-of-type': {
+                    marginRight: 0
+                  } 
+                }}
+              >
+                <TextField 
+                  label="Marca" 
+                  variant="outlined" 
+                  fullWidth
+                  defaultValue={brand}
+                  name="brand"
+                  required={required}
+                  onFocus={handleFocus}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e, i)}
+                />
+                <TextField 
+                  label="Valor" 
+                  type="number"
+                  variant="outlined" 
+                  fullWidth
+                  defaultValue={price > 0 ? price : ''}
+                  inputProps={{ step: 'any', min: '0' }}
+                  name="price"
+                  required={required}
+                  onFocus={handleFocus}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e, i)}
+                />
+                <TextField 
+                  label="Empresa" 
+                  variant="outlined" 
+                  fullWidth
+                  sx={{ margin: '0 !important' }}
+                  defaultValue={company}
+                  name="company"
+                  required={required}
+                  onFocus={handleFocus}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e, i)}
+                />
+              </Box>
+            )
+          })}
+        </div>
+        <Button type="submit" variant="contained" fullWidth sx={{ marginTop: 4 }}>
+          {state.buttonTitle}
+        </Button>
+      </Container>
     </Box>
     {loader && <Loader />}
     </>

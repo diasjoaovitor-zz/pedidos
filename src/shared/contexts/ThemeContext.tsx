@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useMemo, useState } from "react"
+import { createContext, ReactNode, useCallback, useContext, useMemo, useState } from "react"
 import { ThemeProvider } from '@emotion/react'
 import { Theme } from '@mui/material'
 import { Box } from "@mui/material"
@@ -14,7 +14,7 @@ const ThemeContext = createContext({} as TThemeContext)
 
 export const useAppThemeContext = () => useContext(ThemeContext)
 
-export const AppThemeProvider: React.FC = ({ children }) => {
+export const AppThemeProvider: React.FC<{children: ReactNode}> = ({ children }) => {
   const [ themeName, setThemeName ] = useState<'light' | 'dark'>('dark')
 
   const toggleTheme = useCallback(() => {

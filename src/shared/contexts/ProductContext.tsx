@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react"
+import { createContext, ReactNode, useContext, useState } from "react"
 import { productState } from "../states"
 import { TProduct, TProductPresentation } from "../types"
 
@@ -17,7 +17,7 @@ const ProductContext = createContext({} as TProductContext)
 
 export const useProductContext = () => useContext(ProductContext)
 
-export const ProductProvider: React.FC = ({ children }) => {
+export const ProductProvider: React.FC<{children: ReactNode}> = ({ children }) => {
   const [ updateData, setUpdateData ] = useState(true)
   const [ product, setProduct ] = useState(productState)
   const [ products, setProducts ] = useState([productState])

@@ -20,7 +20,6 @@ export const Auth: React.FC<Props> = ({ children, title, to, handleSubmit }) => 
         alignItems: 'center',
         justifyContent: 'center',
         height: '100vh',
-        maxWidth: 'sm',
         padding: 4,
         '& .MuiOutlinedInput-root': {
           marginBottom: 1,
@@ -41,7 +40,7 @@ export const Auth: React.FC<Props> = ({ children, title, to, handleSubmit }) => 
           Pedidos
         </Typography>    
       </Toolbar>
-      <Card sx={{ width: '100%', padding: 3 }}>
+      <Card sx={{ width: '100%', maxWidth: 'sm', padding: 3 }}>
         <Box component="form" onSubmit={handleSubmit}>
           <Title component="h2">
             {title}

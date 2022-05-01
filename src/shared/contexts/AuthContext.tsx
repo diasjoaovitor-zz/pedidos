@@ -1,5 +1,5 @@
 import { User } from "firebase/auth"
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, ReactNode, useContext, useEffect, useState } from "react"
 import { Navigate, Outlet } from "react-router-dom"
 import { Loader } from "../components"
 import { authConfig } from '../environment/firebase-config'
@@ -18,7 +18,7 @@ export const PrivateRoute: React.FC = () => {
   return !!user ? <Outlet /> : <Navigate to="/login" />
 }
 
-export const AuthProvider: React.FC = ({ children }) => {
+export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
   const [ user, setUser ] = useState<User | null>(null)
   const [ loader, setLoader ] = useState(true)
 

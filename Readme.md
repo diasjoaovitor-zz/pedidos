@@ -28,7 +28,7 @@ Senha:
 
 Para testar localmente, é necessário possuir uma conta do [Firebase](https://firebase.google.com/?hl=pt) e criar um novo app. Depois basta seguir os seguintes passos:
 
-Faca o clone do repositório e baixe as dependências do projeto
+Faça o clone do repositório e baixe as dependências do projeto
 
 ```
 git clone https://github.com/diasjoaovitor/pedidos.git

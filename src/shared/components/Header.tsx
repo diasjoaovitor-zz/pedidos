@@ -14,7 +14,7 @@ export const Header: React.FC<{ title: string, to?: string }> = ({ title, to }) 
         bgcolor: 'primary.main', 
         color: 'black',
         justifyContent: 'space-between',
-        padding: '0'
+        padding: '0 !important'
       }}
     >
       <Container sx={{

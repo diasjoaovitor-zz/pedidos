@@ -25,7 +25,7 @@ export const Card: React.FC<Props> = ({ title, items, children }) => (
         {title}
       </Link>
     </Title>
-    <List sx={{ '& .MuiDivider-root': { backgroundColor: 'gray'}}}>
+    <List sx={{ '& .MuiDivider-root': { backgroundColor: 'gray'} }}>
       <Divider />
       {!children ? items && 
         items.length > 0 ? items.map((item, i) => (

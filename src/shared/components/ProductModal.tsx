@@ -41,7 +41,7 @@ export const ProductModal: React.FC<Props> = ({ product, closeModal, handleUpdat
           component="header" 
           sx={{ 
             justifyContent: 'space-between', 
-            paddingX: 0,
+            paddingX: '0 !important',
             '& button': {
               padding: 0
             }
@@ -78,7 +78,7 @@ export const ProductModal: React.FC<Props> = ({ product, closeModal, handleUpdat
                 </Typography>
               </Box>
             </Stack>
-            <Divider />
+            <Divider sx={{ backgroundColor: 'gray' }} />
             <Stack direction="row" justifyContent="space-between" padding={1}>
               <Box textAlign="left">
                 <Typography variant="caption" component="span">

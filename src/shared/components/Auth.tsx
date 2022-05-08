@@ -50,7 +50,7 @@ export const Auth: React.FC<Props> = ({ children, title, to, handleSubmit }) => 
       </Card>
       <Typography component="p">
         <Link to={to}>
-          {to === '/register' ? 'Não tem uma conta? Cadastre-se!' : 'já tenho uma conta'}
+          {to === '/register' ? 'Não tem uma conta? Cadastre-se!' : 'Já tenho uma conta'}
         </Link>
       </Typography>
     </Container>

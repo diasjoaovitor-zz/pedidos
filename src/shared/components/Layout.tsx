@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom"
 import { Container, IconButton, TextField } from "@mui/material"
 import { AddCircle } from '@mui/icons-material';
 import { ChangeEvent, KeyboardEvent, ReactNode } from "react"
@@ -11,12 +12,13 @@ type Props = {
   title: string
   children: ReactNode
   autoFocus?: boolean
-  handleFocus?: () => void
+  focus?: boolean
   handleChange?: (e: ChangeEvent<HTMLInputElement>) => void
   handleKey?: (e: KeyboardEvent<HTMLInputElement>) => void
 }
 
-export const Layout: React.FC<Props> = ({ title, children, autoFocus, handleFocus, handleChange, handleKey }) => {
+export const Layout: React.FC<Props> = ({ title, children, autoFocus, focus, handleChange, handleKey }) => {
+  const navigate = useNavigate()
   const { setProductContext, setProductPresentationContext } = useProductContext()
 
   return (
@@ -29,12 +31,13 @@ export const Layout: React.FC<Props> = ({ title, children, autoFocus, handleFocu
         <TextField 
           label="Digite sua busca..." 
           variant="outlined" 
+          type="search"
           sx={{
             width: "100%",
             marginTop: 2
           }}
           autoFocus={autoFocus}
-          onFocus={handleFocus}
+          onFocus={() => !focus ? null : navigate('/search')}
           onChange={handleChange}
           onKeyDown={handleKey}
         />

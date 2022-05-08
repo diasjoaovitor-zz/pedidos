@@ -2,13 +2,15 @@ import { Button, TextField } from "@mui/material"
 import { AuthError, signInWithEmailAndPassword } from "firebase/auth"
 import { FormEvent, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { Auth, Loader } from "../shared/components"
+import { Auth, Loader, NotificationModal } from "../shared/components"
 import { authConfig } from "../shared/environment/firebase-config"
 import { getElementValues, handleFocus } from "../shared/functions"
+import { loginValidation } from "../shared/validation"
 
 export const Login: React.FC = () => {
   const navigate = useNavigate()
   const [ loader, setLoader ] = useState(false)
+  const [ message, setMessage ] = useState<string>('')
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault()
@@ -20,18 +22,13 @@ export const Login: React.FC = () => {
     } catch (error: unknown) {
       const err = error as AuthError
       setLoader(false)
-      switch(err.code) {
-        case 'auth/user-not-found':
-          return alert('Esse usuário não existe. Faça seu cadastro.')
-        case 'auth/wrong-password':
-          return alert('Senha incorreta')
-        default:
-          return alert('Algo deu errado')
-      }
+      const message = loginValidation(err.code)
+      setMessage(message)
     }
   }
 
   return (
+    <>
     <Auth title="Login" to="/register" handleSubmit={handleSubmit}>
       <TextField
         type="email"
@@ -54,7 +51,9 @@ export const Login: React.FC = () => {
       <Button type="submit" variant="contained" fullWidth sx={{ marginTop: 1 }}>
         Acessar
       </Button>
-      {loader && <Loader />}
     </Auth>
+    <NotificationModal message={message} handleClose={() => setMessage('')} />
+    {loader && <Loader />}
+    </>
   )
 }

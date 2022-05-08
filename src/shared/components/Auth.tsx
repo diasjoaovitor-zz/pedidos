@@ -41,7 +41,7 @@ export const Auth: React.FC<Props> = ({ children, title, to, handleSubmit }) => 
         </Typography>    
       </Toolbar>
       <Card sx={{ width: '100%', maxWidth: 'sm', padding: 3 }}>
-        <Box component="form" onSubmit={handleSubmit}>
+        <Box component="form" role="form" onSubmit={handleSubmit}>
           <Title component="h2">
             {title}
           </Title>

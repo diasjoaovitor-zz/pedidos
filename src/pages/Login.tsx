@@ -14,14 +14,14 @@ export const Login: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault()
-    const [ email, password, ] = getElementValues(e, ['email', 'password'])
     setLoader(true)
     try {
+      const [email, password,] = getElementValues(e, ['email', 'password'])
       await signInWithEmailAndPassword(authConfig, email, password)
       navigate('/')
     } catch (error: unknown) {
-      const err = error as AuthError
       setLoader(false)
+      const err = error as AuthError
       const message = loginValidation(err.code)
       setMessage(message)
     }
@@ -29,31 +29,31 @@ export const Login: React.FC = () => {
 
   return (
     <>
-    <Auth title="Login" to="/register" handleSubmit={handleSubmit}>
-      <TextField
-        type="email"
-        name="email"
-        label="Email"
-        variant="outlined"
-        fullWidth
-        required
-        onFocus={handleFocus}
-      />
-      <TextField
-        type="password"
-        name="password"
-        label="Senha"
-        variant="outlined"
-        fullWidth
-        required
-        onFocus={handleFocus}
-      />
-      <Button type="submit" variant="contained" fullWidth sx={{ marginTop: 1 }}>
-        Acessar
-      </Button>
-    </Auth>
-    <NotificationModal message={message} handleClose={() => setMessage('')} />
-    {loader && <Loader />}
+      <Auth title="Login" to="/register" handleSubmit={handleSubmit}>
+        <TextField
+          type="email"
+          name="email"
+          label="Email"
+          variant="outlined"
+          fullWidth
+          required
+          onFocus={handleFocus}
+        />
+        <TextField
+          type="password"
+          name="password"
+          label="Senha"
+          variant="outlined"
+          fullWidth
+          required
+          onFocus={handleFocus}
+        />
+        <Button type="submit" variant="contained" fullWidth sx={{ marginTop: 1 }}>
+          Acessar
+        </Button>
+      </Auth>
+      <NotificationModal message={message} handleClose={() => setMessage('')} />
+      {loader && <Loader />}
     </>
   )
 }

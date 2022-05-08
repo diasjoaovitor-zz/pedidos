@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
 import { Layout, Card, Loader }from "../shared/components"
 import { useAuthContext, useProductContext } from "../shared/contexts"
 import { getCompanies, getProductNames } from "../shared/functions"
 import { read } from "../shared/services/firestore"
 
 export const Home: React.FC = () => {
-  const navigate = useNavigate()
   const { user } = useAuthContext()
   const { updateData, setUpdateData, productsContext, setProductsContext } = useProductContext()
   const [ productNames, setProductNames ] = useState<string[]>(getProductNames(productsContext))
@@ -32,10 +30,10 @@ export const Home: React.FC = () => {
         }
       })()
     }
-  }, [])
+  }, [updateData, user, productsContext, setProductsContext, setUpdateData])
 
   return (
-    <Layout title="Pedidos" handleFocus={() => navigate('/search')}>
+    <Layout title="Pedidos" focus={true}>
       <Card title="Empresas" items={companies} />
       <Card title="Produtos" items={productNames} />
       {loader && <Loader />}

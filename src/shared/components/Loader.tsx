@@ -16,7 +16,6 @@ export const Loader: React.FC = () => {
         left: 0,
         zIndex: 1,
         backgroundColor:  theme.palette.secondary.dark
-  
       }}
     >
       <CircularProgress />

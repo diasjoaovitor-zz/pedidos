@@ -3,38 +3,35 @@ import { createUserWithEmailAndPassword, AuthError } from "firebase/auth"
 import { addDoc, collection } from "firebase/firestore"
 import { FormEvent, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { Auth, Loader } from "../shared/components"
+import { Auth, Loader, NotificationModal } from "../shared/components"
 import { authConfig, db } from "../shared/environment/firebase-config"
 import { getElementValues, handleFocus } from "../shared/functions"
+import { registerValidation } from "../shared/validation"
 
 export const Register: React.FC = () => {
   const navigate = useNavigate()
   const [ loader, setLoader ] = useState(false)
+  const [ message, setMessage ] = useState<string>('')
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault()
     const [ email, password, passwordConfirm ] = getElementValues(e, ['email', 'password', 'passwordConfirm'])
-    if (password !== passwordConfirm) return alert('As senhas não conferem')
+    if (password !== passwordConfirm) return setMessage('As senhas não conferem!')
     setLoader(true)
     try {
       const res = await createUserWithEmailAndPassword(authConfig, email, password)
       await addDoc(collection(db, 'users'), { user: res.user.uid })
       navigate('/')
     } catch (error: unknown) {
-      const err = error as AuthError
       setLoader(false)
-      switch(err.code) {
-        case 'auth/email-already-in-use':
-          return alert('Esse usuário já existe!')
-        case 'auth/invalid-email':
-          return alert('Email inválido')
-        default:
-          return alert('Algo deu errado.')
-      }
+      const err = error as AuthError
+      const message = registerValidation(err.code)
+      setMessage(message)
     }
   }
 
   return (
+    <>
     <Auth title="Criar conta" to="/login" handleSubmit={handleSubmit}>
       <TextField
         type="email"
@@ -66,7 +63,9 @@ export const Register: React.FC = () => {
       <Button type="submit" variant="contained" fullWidth sx={{ marginTop: 1 }}>
         Registrar
       </Button>
-      {loader && <Loader />}
     </Auth>
+    <NotificationModal message={message} handleClose={() => setMessage('')} />
+    {loader && <Loader />}
+    </>
   )
 }

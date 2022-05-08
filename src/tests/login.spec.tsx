@@ -1,13 +1,19 @@
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from '@testing-library/user-event'
+import { createMemoryHistory } from "history"
+import { Route } from "./utils/Route"
 import { Login } from "../pages"
-import { history, Route } from "./utils/Route"
+import { AppThemeProvider } from "../shared/contexts"
+
+const history = createMemoryHistory({ initialEntries: ['/login'] })
 
 const setup = () => {
   render(
-    <Route>
-      <Login />
-    </Route>
+    <AppThemeProvider>
+      <Route history={history}>
+        <Login />
+      </Route>
+    </AppThemeProvider>
   )
   return screen
 }
@@ -26,11 +32,11 @@ describe('<Login />', () => {
     const password = screen.getByLabelText('Senha *')
     const button = screen.getByRole('button')
 
-    userEvent.type(email, 'not-exists@not-exists.com')
-    userEvent.type(password, 'not-exists')
-    userEvent.click(button)
-    
-    await waitFor(() => screen.queryByText('Esse usuário não existe. Faça seu cadastro.'))
+    await userEvent.type(email, 'not-exists@not-exists.com')
+    await userEvent.type(password, 'not-exists')
+    await userEvent.click(button)
+
+    await waitFor(() => expect(screen.queryByText('Esse usuário não existe. Faça seu cadastro.')).toBeInTheDocument())
   }) 
 
   it('Wrong password', async () => {
@@ -39,10 +45,10 @@ describe('<Login />', () => {
     const password = screen.getByLabelText('Senha *')
     const button = screen.getByRole('button')
 
-    userEvent.type(email, 'test@test.com')
-    userEvent.type(password, 'not-exists')
-    userEvent.click(button)
-    
-    await waitFor(() => screen.queryByText('Senha incorreta.'))
+    await userEvent.type(email, 'teste@teste.com')
+    await userEvent.type(password, 'not-exists')
+    await userEvent.click(button)
+
+    await waitFor(() => expect(screen.queryByText('Senha incorreta.')).toBeInTheDocument())
   }) 
 })

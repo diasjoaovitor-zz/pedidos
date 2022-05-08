@@ -1,10 +1,8 @@
-import { createMemoryHistory } from 'history'
 import { ReactNode } from 'react'
 import { Router } from 'react-router-dom'
+import { MemoryHistory } from 'history'
 
-export const history = createMemoryHistory({ initialEntries: ['/'] })
-
-export const Route: React.FC<{ children: ReactNode }> = ({ children}) => (
+export const Route: React.FC<{ children: ReactNode, history: MemoryHistory  }> = ({ children, history }) => (
   <Router navigator={history} location={history.location}>
     {children}
   </Router>

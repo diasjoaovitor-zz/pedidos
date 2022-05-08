@@ -1,10 +1,10 @@
 export default {
   clearMocks: true,
   coverageProvider: 'v8',
-  setupFilesAfterEnv: ['<rootDir>/.jest/setup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   testEnvironment: 'jsdom',
   transform: {
-    '^.+\\.(t|j)sx?$': [
+    '^.+\\.(ts|tsx)?$': [
       '@swc/jest',
       {
         jsc: {

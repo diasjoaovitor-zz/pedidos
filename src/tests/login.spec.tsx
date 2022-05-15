@@ -4,14 +4,17 @@ import { createMemoryHistory } from "history"
 import { Route } from "./utils/Route"
 import { Login } from "../pages"
 import { AppThemeProvider } from "../shared/contexts"
+import { TLoginService } from "../shared/types"
+
+jest.mock('firebase/auth')
 
 const history = createMemoryHistory({ initialEntries: ['/login'] })
 
-const setup = () => {
+const setup = (login: TLoginService) => {
   render(
     <AppThemeProvider>
       <Route history={history}>
-        <Login />
+        <Login login={login} />
       </Route>
     </AppThemeProvider>
   )
@@ -20,14 +23,18 @@ const setup = () => {
 
 describe('<Login />', () => {
   it('Navigation from Login page to Register page', () => {
-    const screen = setup()
+    const screen = setup(jest.fn())
     const link = screen.getByRole('link')
     link.click()
     expect(history.location.pathname).toBe('/register') 
   }) 
 
   it('User not found', async () => {
-    const screen = setup()
+    const login = jest.fn()
+    login.mockImplementation(() => {
+      throw { code: 'auth/user-not-found' }
+    })
+    const screen = setup(login)
     const email = screen.getByLabelText('Email *')
     const password = screen.getByLabelText('Senha *')
     const button = screen.getByRole('button')
@@ -40,7 +47,11 @@ describe('<Login />', () => {
   }) 
 
   it('Wrong password', async () => {
-    const screen = setup()
+    const login = jest.fn()
+    login.mockImplementation(() => {
+      throw { code: 'auth/wrong-password' }
+    })
+    const screen = setup(login)
     const email = screen.getByLabelText('Email *')
     const password = screen.getByLabelText('Senha *')
     const button = screen.getByRole('button')
@@ -51,4 +62,17 @@ describe('<Login />', () => {
 
     await waitFor(() => expect(screen.queryByText('Senha incorreta.')).toBeInTheDocument())
   }) 
+
+  it('Correct Login', async () => {
+    const screen = setup(jest.fn())
+    const email = screen.getByLabelText('Email *')
+    const password = screen.getByLabelText('Senha *')
+    const button = screen.getByRole('button')
+
+    await userEvent.type(email, 'teste@teste.com')
+    await userEvent.type(password, '123456')
+    await userEvent.click(button)
+
+    await waitFor(() => expect(history.location.pathname).toBe('/'))
+  })
 })

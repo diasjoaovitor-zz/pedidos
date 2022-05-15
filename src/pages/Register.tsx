@@ -1,14 +1,17 @@
 import { Button, TextField } from "@mui/material"
-import { createUserWithEmailAndPassword, AuthError } from "firebase/auth"
-import { addDoc, collection } from "firebase/firestore"
+import { AuthError } from "firebase/auth"
 import { FormEvent, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Auth, Loader, NotificationModal } from "../shared/components"
-import { authConfig, db } from "../shared/environment/firebase-config"
 import { getElementValues, handleFocus } from "../shared/functions"
+import { TRegisterService } from "../shared/types"
 import { registerValidation } from "../shared/validation"
 
-export const Register: React.FC = () => {
+type Props = {
+  register: TRegisterService
+}
+
+export const Register: React.FC<Props> = ({ register }) => {
   const navigate = useNavigate()
   const [ loader, setLoader ] = useState(false)
   const [ message, setMessage ] = useState<string>('')
@@ -19,8 +22,7 @@ export const Register: React.FC = () => {
     if (password !== passwordConfirm) return setMessage('As senhas não conferem!')
     setLoader(true)
     try {
-      const res = await createUserWithEmailAndPassword(authConfig, email, password)
-      await addDoc(collection(db, 'users'), { user: res.user.uid })
+      await register(email, password)
       navigate('/')
     } catch (error: unknown) {
       setLoader(false)

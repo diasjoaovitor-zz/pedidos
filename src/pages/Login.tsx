@@ -1,13 +1,17 @@
 import { Button, TextField } from "@mui/material"
-import { AuthError, signInWithEmailAndPassword } from "firebase/auth"
+import { AuthError } from "firebase/auth"
 import { FormEvent, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Auth, Loader, NotificationModal } from "../shared/components"
-import { authConfig } from "../shared/environment/firebase-config"
 import { getElementValues, handleFocus } from "../shared/functions"
+import { TLoginService } from "../shared/types"
 import { loginValidation } from "../shared/validation"
 
-export const Login: React.FC = () => {
+type Props = {
+  login: TLoginService
+}
+
+export const Login: React.FC<Props> = ({ login }) => {
   const navigate = useNavigate()
   const [ loader, setLoader ] = useState(false)
   const [ message, setMessage ] = useState<string>('')
@@ -17,7 +21,7 @@ export const Login: React.FC = () => {
     setLoader(true)
     try {
       const [email, password,] = getElementValues(e, ['email', 'password'])
-      await signInWithEmailAndPassword(authConfig, email, password)
+      await login(email, password)
       navigate('/')
     } catch (error: unknown) {
       setLoader(false)

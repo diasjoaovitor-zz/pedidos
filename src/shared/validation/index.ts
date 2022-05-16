@@ -1,2 +1,1 @@
-export { loginValidation } from './login-validation'
-export { registerValidation } from './register-validation'
+export { authValidation } from './auth-validation'

@@ -6,6 +6,7 @@ import { TAvailability, TProduct } from "../shared/types"
 import { useAppThemeContext, useAuthContext, useProductContext } from "../shared/contexts"
 import { allFieldsAreFilled, getElementValues, handleFocus, removeEmptyFields, removeExcessAvailabilityFields } from "../shared/functions"
 import { create, update } from "../shared/services/firestore"
+import { GoBack } from "../shared/components/GoBack"
 
 export const Product: React.FC = () => {
   const { theme } = useAppThemeContext()
@@ -72,7 +73,9 @@ export const Product: React.FC = () => {
 
   return (
     <>
-    <Header title={state.title} to={state.to} />
+    <Header title={state.title}>
+      <GoBack />
+    </Header>
     <Box 
       component="form"
       flex={1}

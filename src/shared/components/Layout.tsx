@@ -3,13 +3,12 @@ import { Container, IconButton, TextField } from "@mui/material"
 import { AddCircle } from '@mui/icons-material';
 import { ChangeEvent, KeyboardEvent, ReactNode } from "react"
 import { Link } from "react-router-dom"
-import { Header } from "./Header"
 import { useProductContext } from "../contexts"
 import { TProductPresentation } from "../types"
 import { productState } from "../states";
 
 type Props = {
-  title: string
+  header: ReactNode
   children: ReactNode
   autoFocus?: boolean
   focus?: boolean
@@ -17,13 +16,13 @@ type Props = {
   handleKey?: (e: KeyboardEvent<HTMLInputElement>) => void
 }
 
-export const Layout: React.FC<Props> = ({ title, children, autoFocus, focus, handleChange, handleKey }) => {
+export const Layout: React.FC<Props> = ({ header, children, autoFocus, focus, handleChange, handleKey }) => {
   const navigate = useNavigate()
   const { setProductContext, setProductPresentationContext } = useProductContext()
 
   return (
     <>
-      <Header title={title} />
+      {header}
       <Container sx={{ 
         backgroundColor: 'background.default', 
         textAlign: 'right'

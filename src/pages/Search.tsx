@@ -1,11 +1,12 @@
 import { FormEvent, useEffect, useState, KeyboardEvent } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Divider, ListItem, Typography } from "@mui/material"
-import { Card, Chip, Layout, ProductModal } from "../shared/components"
+import { Card, Chip, Header, Layout, ProductModal } from "../shared/components"
 import { getCompanies, getElementValues, getProductsPresentation } from "../shared/functions"
 import { useProductContext } from "../shared/contexts"
 import { search } from "../shared/functions/search"
 import { TProductPresentation } from "../shared/types"
+import { GoBack } from "../shared/components/GoBack"
 
 export const Search: React.FC = () => {
   const navigate = useNavigate()
@@ -67,10 +68,14 @@ export const Search: React.FC = () => {
 
   return (
     <Layout 
-      title="Pesquisa" 
       autoFocus={true} 
       handleChange={e => handleDynamicSearch(e.currentTarget.value)} 
       handleKey={handleKey}
+      header={
+        <Header title="Pesquisa">
+          <GoBack />
+        </Header>
+      }
     >
       <Chip 
         chips={chips} 

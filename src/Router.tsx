@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { PrivateRoute } from './shared/contexts'
 import { Login, Home, Product, Search, Register } from './pages'
-import { login, register } from './shared/services/firestore'
+import { login, register, logout } from './shared/services/firestore'
 
 export const Router: React.FC = () => (
   <BrowserRouter>
@@ -9,7 +9,7 @@ export const Router: React.FC = () => (
       <Route path="/login" element={<Login login={login} />} />
       <Route path="/register" element={<Register register={register} />} />
       <Route path="/" element={<PrivateRoute />}>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home logout={logout} />} />
       </Route>
       <Route path="/product/:method" element={<PrivateRoute />}>
         <Route path="/product/:method" element={<Product />} />

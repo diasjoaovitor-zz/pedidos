@@ -1,9 +1,12 @@
 import { IconButton, MenuItem, Menu as MatMenu } from "@mui/material"
 import { Menu as MenuIcon } from "@mui/icons-material"
 import { useState } from "react"
-import { authConfig } from "../environment/firebase-config"
 
-export const Menu: React.FC = () => {
+type Props = {
+  handleLogout(): Promise<void>
+}
+
+export const Menu: React.FC<Props> = ({ handleLogout }) => {
   const [ anchorEl, setAnchorEl ] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
@@ -14,15 +17,6 @@ export const Menu: React.FC = () => {
     setAnchorEl(null)
   }
 
-  const handleLogout = async () => {
-    try {
-      await authConfig.signOut()
-    } catch (error) {
-      alert('Algo deu errado')
-      console.log(error)
-    }
-  }
-
   return (
     <>
     <IconButton
@@ -31,6 +25,7 @@ export const Menu: React.FC = () => {
       aria-expanded={open ? 'true' : undefined}
       sx={{ color: 'background.default' }}
       onClick={handleClick}
+      role="navigation"
     >
       <MenuIcon />
     </IconButton>

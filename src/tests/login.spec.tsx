@@ -4,13 +4,13 @@ import { createMemoryHistory } from "history"
 import { Route } from "./utils/Route"
 import { Login } from "../pages"
 import { AppThemeProvider } from "../shared/contexts"
-import { TLoginService } from "../shared/types"
+import { TAuthService } from "../shared/types"
 
 jest.mock('firebase/auth')
 
 const history = createMemoryHistory({ initialEntries: ['/login'] })
 
-const setup = (login: TLoginService) => {
+const setup = (login: TAuthService) => {
   render(
     <AppThemeProvider>
       <Route history={history}>

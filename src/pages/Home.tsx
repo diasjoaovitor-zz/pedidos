@@ -42,7 +42,6 @@ export const Home: React.FC<Props> = ({ logout }) => {
 
   return (
     <Layout 
-      focus={true} 
       header={
         <Header title="Pedidos">
           <Toolbar sx={{ padding: 0 }}>

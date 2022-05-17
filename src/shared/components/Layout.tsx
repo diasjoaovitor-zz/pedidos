@@ -11,12 +11,11 @@ type Props = {
   header: ReactNode
   children: ReactNode
   autoFocus?: boolean
-  focus?: boolean
   handleChange?: (e: ChangeEvent<HTMLInputElement>) => void
   handleKey?: (e: KeyboardEvent<HTMLInputElement>) => void
 }
 
-export const Layout: React.FC<Props> = ({ header, children, autoFocus, focus, handleChange, handleKey }) => {
+export const Layout: React.FC<Props> = ({ header, children, autoFocus, handleChange, handleKey }) => {
   const navigate = useNavigate()
   const { setProductContext, setProductPresentationContext } = useProductContext()
 
@@ -36,7 +35,7 @@ export const Layout: React.FC<Props> = ({ header, children, autoFocus, focus, ha
             marginTop: 2
           }}
           autoFocus={autoFocus}
-          onFocus={() => !focus ? null : navigate('/search')}
+          onFocus={() => !autoFocus && navigate('/search')}
           onChange={handleChange}
           onKeyDown={handleKey}
         />
@@ -51,6 +50,7 @@ export const Layout: React.FC<Props> = ({ header, children, autoFocus, focus, ha
             setProductContext(productState)
             setProductPresentationContext({} as TProductPresentation)
           }}
+          role="insertion"
         >
           <IconButton sx={{ 
             padding: 0,

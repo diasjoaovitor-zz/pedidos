@@ -5,6 +5,7 @@ import { Route } from "./utils/Route"
 import { Home } from "../pages"
 import { TLogoutService } from "../shared/types"
 import { AppThemeProvider, ProductProvider } from "../shared/contexts"
+import { productState } from "../shared/states"
 
 jest.mock('firebase/auth')
 
@@ -14,7 +15,7 @@ const setup = (logout: TLogoutService) => {
   render(
     <Route history={history}>
       <AppThemeProvider>
-        <ProductProvider>
+        <ProductProvider product={productState}>
           <Home logout={logout} />
         </ProductProvider>
       </AppThemeProvider>

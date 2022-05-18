@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { PrivateRoute } from './shared/contexts'
 import { Login, Home, Product, Search, Register } from './pages'
-import { login, register, logout } from './shared/services/firestore'
+import { login, register, logout, create, update } from './shared/services/firestore'
 
 export const Router: React.FC = () => (
   <BrowserRouter>
@@ -12,7 +12,7 @@ export const Router: React.FC = () => (
         <Route path="/" element={<Home logout={logout} />} />
       </Route>
       <Route path="/product/:method" element={<PrivateRoute />}>
-        <Route path="/product/:method" element={<Product />} />
+        <Route path="/product/:method" element={<Product create={create} update={update} />} />
       </Route>
       <Route path="/search" element={<PrivateRoute />}>
         <Route path="/search" element={<Search />} />

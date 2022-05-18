@@ -2,13 +2,17 @@ import { Button, Container, TextField, Box } from "@mui/material"
 import { ChangeEvent, FormEvent, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Header, Loader } from "../shared/components"
-import { TAvailability, TProduct } from "../shared/types"
+import { TAvailability, TProduct, TProductService } from "../shared/types"
 import { useAppThemeContext, useAuthContext, useProductContext } from "../shared/contexts"
 import { allFieldsAreFilled, getElementValues, handleFocus, removeEmptyFields, removeExcessAvailabilityFields } from "../shared/functions"
-import { create, update } from "../shared/services/firestore"
 import { GoBack } from "../shared/components/GoBack"
 
-export const Product: React.FC = () => {
+type Props = {
+  create: TProductService
+  update: TProductService
+}
+
+export const Product: React.FC<Props> = ({ create, update }) => {
   const { theme } = useAppThemeContext()
   const { setUpdateData, productContext } = useProductContext()
   const { user } = useAuthContext()
@@ -16,12 +20,10 @@ export const Product: React.FC = () => {
   const navigate = useNavigate()
   const method = pathname.split('/')[2]
   const state = method === 'create' ? {
-    to: '/',
     title: 'Adicionar',
     buttonTitle: 'Adicionar',
     submit: async (product: TProduct) => create(product)
   } : {
-    to: '/search',
     title: 'Editar',
     buttonTitle: 'Salvar',
     submit: async (product: TProduct) => update(product)
@@ -55,7 +57,7 @@ export const Product: React.FC = () => {
     e.preventDefault()
     const [ name, description, ] = getElementValues(e, ['name', 'description'])
     const data = { 
-      ref: user!.uid, 
+      ref: user?.uid, 
       name, 
       description, 
       availability: removeEmptyFields(availability) 

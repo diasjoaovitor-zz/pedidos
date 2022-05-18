@@ -4,6 +4,7 @@ import { createMemoryHistory } from "history"
 import { Route } from "./utils/Route"
 import { AppThemeProvider, ProductProvider } from "../shared/contexts"
 import { Card, Layout } from "../shared/components"
+import { productState } from "../shared/states"
 
 jest.mock('firebase/auth')
 
@@ -13,7 +14,7 @@ const setup = () => {
   render(
     <Route history={history}>
       <AppThemeProvider>
-        <ProductProvider>
+        <ProductProvider product={productState}>
           <Layout header="header">
             <Card items={['Teiú']} title="Empresas" />
           </Layout>
@@ -29,7 +30,11 @@ describe('<Layout />', () => {
     const screen = setup()
     const search = screen.getByRole('searchbox')
     await userEvent.click(search)
+    await waitFor(() => expect(history.location.pathname).toBe('/search'))
 
+    history.push('/')
+    const companyName = screen.getByText('Teiú')
+    await userEvent.click(companyName)
     await waitFor(() => expect(history.location.pathname).toBe('/search'))
   })
 

@@ -44,7 +44,7 @@ export const Home: React.FC<Props> = ({ logout }) => {
     <Layout 
       header={
         <Header title="Pedidos">
-          <Toolbar sx={{ padding: 0 }}>
+          <Toolbar sx={{ padding: '0 !important' }}>
             <ToggleTheme />
             <Menu handleLogout={handleLogout} />
           </Toolbar>

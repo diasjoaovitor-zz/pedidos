@@ -6,10 +6,8 @@ export const GoBack: React.FC = () => {
   const navigate = useNavigate()
 
   return (
-    <Link to="/" onClick={() => navigate(-1)}>
-      <IconButton sx={{ color: 'background.default' }} >
-        <ArrowBack />
-      </IconButton>
-    </Link>
+    <IconButton role="link" sx={{ color: 'background.default' }} onClick={() => navigate(-1)}>
+      <ArrowBack />
+    </IconButton>
   )
 }

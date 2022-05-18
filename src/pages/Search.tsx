@@ -18,7 +18,6 @@ export const Search: React.FC = () => {
   } = useProductContext()
   const [ productsPresentation, setProductsPresentation ] = useState(getProductsPresentation(productsContext))
   const [ productPresentation, setProductPresentation ] = useState(productPresentationContext)
-  const [ products, setProducts ] = useState(productsContext)
   const [ companies, setCompanies ] = useState<string[]>(getCompanies(productsContext))
   const [ chips, setChips ] = useState<string[]>(chip ? [chip as string] : [])
   const [ modal, setModal ] = useState(Object.keys(productPresentationContext).length !== 0)
@@ -62,7 +61,7 @@ export const Search: React.FC = () => {
 
   const navigateToUpdate = (id: string): void => {
     setProductPresentationContext(productPresentation)
-    setProductContext(products.filter(product => product.id === id)[0])
+    setProductContext(productsContext.filter(product => product.id === id)[0])
     navigate('/product/update')
   }
 

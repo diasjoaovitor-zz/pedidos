@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 import { addDoc, collection, deleteDoc, doc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore"
-import { authConfig, db } from "../environment/firebase-config"
+import { authConfig, db } from "../environment"
 import { TProduct } from "../types"
 
 export const login = async (email: string, password: string): Promise<void> => {

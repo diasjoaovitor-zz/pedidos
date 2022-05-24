@@ -1,13 +1,11 @@
-import { Container, Toolbar, Typography } from "@mui/material"
-import { Menu } from "./Menu"
-import { ToggleTheme } from "./ToggleTheme"
-import { GoBack } from "./GoBack"
 import { ReactNode } from "react"
+import { Container, Toolbar, Typography } from "@mui/material"
 
 type Props = {
   title: string
   children: ReactNode
 }
+
 export const Header: React.FC<Props> = ({ title, children }) => (
   <Toolbar 
     component="header"

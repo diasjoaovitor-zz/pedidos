@@ -1,5 +1,7 @@
 export { Header } from './Header'
 export { Card } from './Card'
+export { SearchCardItem } from './SearchCardItem'
+export { HomeCardItem } from './HomeCardItem'
 export { Layout } from './Layout'
 export { Chip } from './Chip'
 export { ProductModal } from './ProductModal'

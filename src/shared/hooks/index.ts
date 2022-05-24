@@ -1,2 +1,3 @@
 export { useAuthSubmit } from './useAuthSubmit'
-export { useLogout } from './useLogout'
+export { useSearch } from './useSearch'
+export { useProduct } from './useProduct'

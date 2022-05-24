@@ -8,7 +8,7 @@ type Props = {
   title: string
   to: string
   children: ReactNode
-  handleSubmit(e: FormEvent<HTMLElement>): Promise<void> | any
+  handleSubmit(e: FormEvent<HTMLElement>): Promise<void>
 }
 
 export const Auth: React.FC<Props> = ({ children, title, to, handleSubmit }) => {

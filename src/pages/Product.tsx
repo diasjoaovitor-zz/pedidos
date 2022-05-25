@@ -1,13 +1,13 @@
 import { Header, Loader, NotificationModal } from "../shared/components"
-import { TProductService } from "../shared/types"
+import { TCreateProductService, TUpdateProductService } from "../shared/types"
 import { GoBack } from "../shared/components/GoBack"
 import { ProductForm } from "../shared/components/ProductForm"
 import { useProduct } from "../shared/hooks"
 import { ProductFieldset } from "../shared/components/ProductFieldset"
 
 type Props = {
-  create: TProductService
-  update: TProductService
+  create: TCreateProductService
+  update: TUpdateProductService
 }
 
 export const Product: React.FC<Props> = ({ create, update }) => {

@@ -31,8 +31,8 @@ export const read = async (userId: string): Promise<TProduct[]> => {
   return products
 }
 
-export const update = async (product: TProduct): Promise<void> => {
-  await updateDoc(doc(db, 'products', product.id as string), product)
+export const update = async (product: TProduct, id: string): Promise<void> => {
+  await updateDoc(doc(db, 'products', id), product)
 }
 
 export const destroy = async (id: string): Promise<void> => {

@@ -16,14 +16,15 @@ export const Home: React.FC = () => {
       const { companies, products } = getHomeData(data)
       setCompanies(companies)
       setProducts(products)
+      setLoader(false)
     }
   }, [data])
 
   useEffect(() => {
     if(error) {
       setMessage('Algo deu errado!')
+      setLoader(false)
     }
-    setLoader(false)
   }, [error])
 
   return (

@@ -1,10 +1,10 @@
 import { ChangeEvent, FormEvent, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { TAvailability, TProduct, TProductService } from "../types"
+import { TAvailability, TProduct, TCreateProductService, TUpdateProductService } from "../types"
 import { useAuthContext, useProductContext } from "../contexts"
 import { allFieldsAreFilled, getElementValues, removeEmptyFields, removeExcessAvailabilityFields } from "../functions"
 
-export const useProduct = (create: TProductService, update: TProductService) => {
+export const useProduct = (create: TCreateProductService, update: TUpdateProductService) => {
   const { productContext } = useProductContext()
 
   const { user } = useAuthContext()
@@ -19,7 +19,7 @@ export const useProduct = (create: TProductService, update: TProductService) => 
   } : {
     title: 'Editar',
     buttonTitle: 'Salvar',
-    submit: async (product: TProduct) => update(product)
+    submit: async (product: TProduct) => update(product, productContext.id as string)
   }
 
   const product = { ...productContext, availability: [
@@ -56,7 +56,12 @@ export const useProduct = (create: TProductService, update: TProductService) => 
       ref: user?.uid, 
       name, 
       description, 
-      availability: removeEmptyFields(availability) 
+      // map is necessary while not implements mutation type of graphql
+      availability: removeEmptyFields(availability).map(({ brand, company, price }) => {
+        return {
+          brand, company, price
+        }
+      }) 
     }
     setLoader(true)
     try {

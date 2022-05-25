@@ -1,7 +1,7 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 
 export const client = new ApolloClient({
-  uri: 'http://localhost:5001/pedidos-78c30/us-central1/default',
+  uri: process.env.REACT_APP_CLOUD_fUNCTIONS_URL,
   cache: new InMemoryCache({
     typePolicies: {
       Query: {

@@ -1,131 +1,88 @@
-import { FormEvent, useEffect, useState, KeyboardEvent } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
-import { Divider, ListItem, Typography } from "@mui/material"
-import { Card, Chip, Header, Layout, ProductModal } from "../shared/components"
-import { getCompanies, getElementValues, getProductsPresentation } from "../shared/functions"
-import { useProductContext } from "../shared/contexts"
-import { search } from "../shared/functions/search"
-import { TProductPresentation } from "../shared/types"
+import { Divider, ListItem } from "@mui/material"
+import { useEffect } from "react"
+import { Card, Chip, Header, Layout, Loader, NotificationModal, ProductModal, SearchCardItem } from "../shared/components"
 import { GoBack } from "../shared/components/GoBack"
+import { getCompanies, getSearchData } from "../shared/functions"
+import { useQuerySearch } from "../shared/graphql"
+import { useSearch } from "../shared/hooks"
+import { TProductPresentation } from "../shared/types"
 
 export const Search: React.FC = () => {
-  const navigate = useNavigate()
-  const { state: chip } = useLocation()
+  const { data } = useQuerySearch()
   const { 
-    setProductContext, 
-    productsContext,
-    productPresentationContext, setProductPresentationContext 
-  } = useProductContext()
-  const [ productsPresentation, setProductsPresentation ] = useState(getProductsPresentation(productsContext))
-  const [ productPresentation, setProductPresentation ] = useState(productPresentationContext)
-  const [ companies, setCompanies ] = useState<string[]>(getCompanies(productsContext))
-  const [ chips, setChips ] = useState<string[]>(chip ? [chip as string] : [])
-  const [ modal, setModal ] = useState(Object.keys(productPresentationContext).length !== 0)
+    chips,
+    setData,
+    setProductPresentationContext,
+    products, setProducts, 
+    filteredProducts, setFilteredProducts,
+    filteredCompanies, setFilteredCompanies,
+    product, setProduct,
+    addChip, removeChip,
+    handleSearch, handleUpdate, handleDelete,
+    modal, setModal,
+    message, setMessage,
+    loader, setLoader
+  } = useSearch()
 
   useEffect(() => {
-    const presentation = getProductsPresentation(productsContext)
-    setCompanies(
-      search(chips, presentation).map(({ company }) => company)
-    )
-    setProductsPresentation(
-      search(chips, presentation)
-    )
-  }, [chips])
-
-  const handleDynamicSearch = (value: string): void => {
-    const presentation = getProductsPresentation(productsContext)
-    setCompanies(
-      search([value], presentation).map(({ company }) => company)
-    )
-    setProductsPresentation(
-      search([value], presentation)
-    )
-  }
-
-  const handleKey = (e: KeyboardEvent<HTMLInputElement>): void => {
-    if(e.key === 'Enter') {
-      handleDynamicSearch(e.currentTarget.querySelector('input')!.value)
+    if(data) {
+      const { products } = getSearchData(data)
+      const companies = getCompanies(products)
+      setData(data)
+      setProducts(products)
+      setFilteredProducts(products)
+      setFilteredCompanies(companies)
+      setLoader(false)
     }
-  }
+  }, [data])
 
-  const addChip = (e: FormEvent<HTMLFormElement>): void => {
-    e.preventDefault()
-    const chps = getElementValues(e, ['chip'])
-    setChips([ ...chips, ...chps ])
-    e.currentTarget.reset()
-  }
-
-  const removeChip = (index: number): void => {
-    setChips(chips.filter((_, i) => i !== index))
-  }
-
-  const navigateToUpdate = (id: string): void => {
-    setProductPresentationContext(productPresentation)
-    setProductContext(productsContext.filter(product => product.id === id)[0])
-    navigate('/product/update')
-  }
+  useEffect(() => {
+    handleSearch(chips)
+  }, [chips, products])
 
   return (
+    <>
+    <Header title="Pesquisa">
+      <GoBack handleClick={() => setProductPresentationContext({} as TProductPresentation)} />
+    </Header>
     <Layout 
       autoFocus={true} 
-      handleChange={e => handleDynamicSearch(e.currentTarget.value)} 
-      handleKey={handleKey}
-      header={
-        <Header title="Pesquisa">
-          <GoBack />
-        </Header>
-      }
+      handleChange={e => handleSearch([e.currentTarget.value])} 
     >
       <Chip 
         chips={chips} 
         handleSubmit={addChip}
         handleDelete={removeChip} 
       />
-      <Card title="Empresas" items={companies} />
-      <Card title="Produtos">
-        {productsPresentation.length > 0 ? productsPresentation.map((product, i) => (
+      <Card title="Empresas">
+        {filteredCompanies.map((company, i) => (
           <div key={i}>
-            <ListItem 
-              sx={{ 
-                justifyContent: 'space-between', 
-                paddingX: 0, 
-                cursor: 'pointer' 
-              }}
-              onClick={() => {
-                setProductPresentation(product)
-                setModal(true)
-              }}
-            >
-              <div>
-                <Typography variant="inherit" component="h3">
-                  {product.name}
-                </Typography>
-                <Typography variant="subtitle1" component="p">
-                  {product.brand} - {product.description}
-                </Typography>
-                <Typography variant="subtitle2" component="p">
-                  Vendido por: {product.company}
-                </Typography>
-              </div>
-              <Typography variant="h5" component="strong" fontWeight="bold" textAlign="right">
-                {product.price}
-              </Typography>
-            </ListItem>
+            <ListItem>{company}</ListItem>
             <Divider />
           </div>
-        )): <ListItem>Nenhum produto encontrado</ListItem>}
+        ))}
       </Card>
-      {modal && productPresentation && 
-        <ProductModal 
-          product={productPresentation} 
-          handleUpdate={navigateToUpdate} 
-          closeModal={() => {
-            setProductPresentationContext({} as TProductPresentation)
-            setModal(false)
-          }} 
-        />
-      }
+      <Card title="Produtos">
+        {filteredProducts.map(product => (
+          <SearchCardItem 
+            key={product.id} product={product} 
+            handleClick={() => {
+              setProduct(product)
+              setModal(true)
+            }} 
+          />
+        ))}
+      </Card>
     </Layout>
+    {modal && <ProductModal 
+      product={product} 
+      handleClose={() => setProduct(undefined)}
+      handleUpdate={handleUpdate} 
+      handleDelete={handleDelete} 
+    />}
+    <NotificationModal message={message} handleClose={() => setMessage('')} />
+    {loader && <Loader />}
+    </>
   )
 }
   

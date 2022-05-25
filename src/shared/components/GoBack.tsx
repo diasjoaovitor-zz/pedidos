@@ -1,12 +1,22 @@
 import { ArrowBack } from "@mui/icons-material"
 import { IconButton } from "@mui/material"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
-export const GoBack: React.FC = () => {
+type Props = {
+  handleClick?:() => void
+}
+
+export const GoBack: React.FC<Props> = ({ handleClick }) => {
   const navigate = useNavigate()
 
   return (
-    <IconButton role="link" sx={{ color: 'background.default' }} onClick={() => navigate(-1)}>
+    <IconButton 
+      role="link" sx={{ color: 'background.default' }} 
+      onClick={() => {
+        handleClick && handleClick()
+        navigate(-1)
+      }}
+    >
       <ArrowBack />
     </IconButton>
   )

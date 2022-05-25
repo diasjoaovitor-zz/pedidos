@@ -5,7 +5,7 @@ type Props = {
   handleClose(): void
 }
 export const NotificationModal: React.FC<Props> = ({ message, handleClose }) => {
-  const open = !!message
+  const open = Boolean(message)
   const theme = useTheme()
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'))
 
@@ -15,7 +15,6 @@ export const NotificationModal: React.FC<Props> = ({ message, handleClose }) => 
       open={open}
       onClose={handleClose}
       >
-      
         <DialogContentText sx={{ padding: 2 }} >
           {message}
         </DialogContentText>

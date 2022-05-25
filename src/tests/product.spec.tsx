@@ -4,7 +4,7 @@ import { createMemoryHistory } from "history"
 import { Route } from "./utils/Route"
 import { Product } from "../pages"
 import { AppThemeProvider, ProductProvider, useProductContext } from "../shared/contexts"
-import { TProduct, TProductService } from "../shared/types"
+import { TProduct, TCreateProductService, TUpdateProductService } from "../shared/types"
 
 jest.mock('firebase/auth')
 
@@ -20,7 +20,7 @@ const productState: TProduct =  {
   }]
 }
 
-const setup = (create: TProductService, update: TProductService) => {
+const setup = (create: TCreateProductService, update: TUpdateProductService) => {
   render(
     <AppThemeProvider>
       <ProductProvider product={productState}>

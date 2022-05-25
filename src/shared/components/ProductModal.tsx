@@ -1,123 +1,90 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Box, Button, Card, Divider, IconButton, Stack, Toolbar, Typography } from "@mui/material";
+import { Box,  DialogContent, Divider, IconButton, Stack, Toolbar, Typography } from "@mui/material";
 import { TProductPresentation } from "../types";
-import { useAppThemeContext, useProductContext } from "../contexts";
-import { Title } from "./";
-import { destroy } from '../services/firestore';
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { Loader } from './Loader';
+import { Title } from ".";
+
+import { Button, Dialog, DialogActions, useMediaQuery, useTheme } from "@mui/material";
 
 type Props = {
-  product: TProductPresentation
-  closeModal(): void
-  handleUpdate(id: string): void
+  product: TProductPresentation | undefined
+  handleClose(): void
+  handleUpdate(): void
+  handleDelete(): void
 }
 
-export const ProductModal: React.FC<Props> = ({ product, closeModal, handleUpdate }) => {
-  const navigate = useNavigate()
-  const { theme } = useAppThemeContext()
-  const { setUpdateData } = useProductContext()
-  const [ loader, setLoader ] = useState(false)
- 
+export const ProductModal: React.FC<Props> = ({ product, handleClose, handleUpdate, handleDelete }) => {
+  const open = Boolean(product)
+  const theme = useTheme()
+  const fullScreen = useMediaQuery(theme.breakpoints.down('xs'))
+
   return (
-    <Box
-      sx={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        height: '100%',
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: theme.palette.secondary.dark,
-        zIndex: 1,
-        padding: 4
-      }}
-    >
-      <Card component="form" sx={{ width: '100%', maxWidth: 'sm',  padding: 2 }}>
-        <Toolbar 
-          component="header" 
-          sx={{ 
-            justifyContent: 'space-between', 
-            paddingX: '0 !important',
-            '& button': {
-              padding: 0
-            }
-          }}
-        >
-          <Title component="h2">
-            Detalhes
-          </Title>
-          <IconButton 
+    <Dialog
+      fullScreen={fullScreen}
+      open={open}
+      onClose={handleClose}
+      >
+        <DialogContent sx={{ padding: 2 }}>
+          <Toolbar 
+            component="header" 
             sx={{ 
-              color: 'text.main' 
-            }} 
-            onClick={closeModal}
+              justifyContent: 'space-between', 
+              paddingX: '0 !important',
+              '& button': {
+                padding: 0
+              }
+            }}
           >
-            <ArrowBackIcon/>
-          </IconButton>
-        </Toolbar>
-        <Box sx={{ border: 1, borderColor: theme.palette.secondary.light }}>
-            <Stack direction="row" justifyContent="space-between" padding={1}>
-              <Box textAlign="left">
-                <Typography variant="caption" component="span">
-                  Produto
-                </Typography>
-                <Typography variant="inherit" component="p">
-                  {product.name}
-                </Typography>
-              </Box>
-              <Box>
-              <Typography variant="caption" component="span">
-                  Marca
-                </Typography>
-                <Typography variant="inherit" component="p">
-                  {product.brand}
-                </Typography>
-              </Box>
-            </Stack>
-            <Divider sx={{ backgroundColor: 'gray' }} />
-            <Stack direction="row" justifyContent="space-between" padding={1}>
-              <Box textAlign="left">
-                <Typography variant="caption" component="span">
-                  Descrição
-                </Typography>
-                <Typography variant="inherit" component="p">
-                  {product.description}
-                </Typography>
-              </Box>
-              <Box>
-                <Typography variant="caption" component="span">
-                  Valor
-                </Typography>
-                <Typography variant="inherit" component="p">
-                  {product.price}
-                </Typography>
-              </Box>
-            </Stack>
-        </Box>
-        <Stack direction="row" gap={1} marginTop={2}>
-          <Button variant="contained" fullWidth onClick={() => handleUpdate(product.id)}>
-            Editar
-          </Button>
-          <Button variant="contained" color="error" fullWidth onClick={async () => {
-            setLoader(true)
-            try {
-              await destroy(product.id)
-              setUpdateData(true)
-              navigate('/')
-            } catch (error) {
-              alert('Algo deu errado')
-              setLoader(false)
-            }
-          }}>
-            Excluir
-          </Button>
-        </Stack>
-      </Card>
-      {loader && <Loader />}
-    </Box>
+            <Title component="h2">
+              Detalhes
+            </Title>
+            <IconButton sx={{ color: 'text.main' }} onClick={handleClose}>
+              <ArrowBackIcon />
+            </IconButton>
+          </Toolbar>
+          <Box sx={{ border: 1, borderColor: 'gray' }}>
+              <Stack direction="row" justifyContent="space-between" padding={1}>
+                <Box>
+                  <Typography variant="caption" component="span">
+                    Produto
+                  </Typography>
+                  <Typography variant="inherit" component="p">
+                    {product?.name}
+                  </Typography>
+                </Box>
+                <Box textAlign="right">
+                  <Typography variant="caption" component="span">
+                    Marca
+                  </Typography>
+                  <Typography variant="inherit" component="p">
+                    {product?.brand}
+                  </Typography>
+                </Box>
+              </Stack>
+              <Divider sx={{ backgroundColor: 'gray' }} />
+              <Stack direction="row" justifyContent="space-between" padding={1}>
+                <Box>
+                  <Typography variant="caption" component="span">
+                    Descrição
+                  </Typography>
+                  <Typography variant="inherit" component="p">
+                    {product?.description}
+                  </Typography>
+                </Box>
+                <Box textAlign="right">
+                  <Typography variant="caption" component="span">
+                    Valor
+                  </Typography>
+                  <Typography variant="inherit" component="p">
+                    {product?.price}
+                  </Typography>
+                </Box>
+              </Stack>
+          </Box>
+        </DialogContent>
+        <DialogActions sx={{ paddingX: 2 }}>
+          <Button variant="contained" fullWidth onClick={handleUpdate}>Editar</Button>
+          <Button variant="contained" color="error" fullWidth onClick={handleDelete}>Excluir</Button>
+        </DialogActions>
+      </Dialog>
   )
 }

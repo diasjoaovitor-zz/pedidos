@@ -2,14 +2,14 @@ export type TAvailability = {
   brand: string
   price: number
   company: string
-}[]
+}
 
 export type TProduct = {
   id?: string
   ref?: string
   name: string
   description: string 
-  availability: TAvailability
+  availability: TAvailability[]
 }
 
 export type TProductPresentation = {

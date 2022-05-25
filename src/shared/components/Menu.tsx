@@ -1,18 +1,19 @@
-import { IconButton, MenuItem, Menu as MatMenu } from "@mui/material"
-import { Menu as MenuIcon } from "@mui/icons-material"
 import { useState } from "react"
+import { IconButton, Menu as MatMenu, MenuItem } from "@mui/material"
+import { Lightbulb, Logout, Menu as MenuIcon } from "@mui/icons-material"
+import { logout } from "../services/firebase"
+import { useAppThemeContext } from "../contexts"
 
-type Props = {
-  handleLogout(): Promise<void>
-}
+export const Menu: React.FC = () => {
+  const { toggleTheme } = useAppThemeContext()
 
-export const Menu: React.FC<Props> = ({ handleLogout }) => {
   const [ anchorEl, setAnchorEl ] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
     setAnchorEl(event.currentTarget)
-  } 
+  }
+   
   const handleClose = (): void => {
     setAnchorEl(null)
   }
@@ -25,20 +26,29 @@ export const Menu: React.FC<Props> = ({ handleLogout }) => {
       aria-expanded={open ? 'true' : undefined}
       sx={{ color: 'background.default' }}
       onClick={handleClick}
-      role="navigation"
+      role="menu"
     >
       <MenuIcon />
     </IconButton>
     <MatMenu
-      id="basic-menu"
       anchorEl={anchorEl}
       open={open}
       onClose={handleClose}
       MenuListProps={{
         'aria-labelledby': 'basic-button',
       }}
+      sx={{ 
+        '& .MuiSvgIcon-root': {
+          marginRight: 2
+        }
+      }}
     >
-      <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        <MenuItem onClick={toggleTheme} >
+          <Lightbulb /> Mudar Tema
+        </MenuItem>
+        <MenuItem onClick={logout}>
+          <Logout /> Logout
+        </MenuItem>
     </MatMenu>
     </>
   )

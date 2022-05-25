@@ -2,6 +2,8 @@
 
 Esse projeto utiliza uma [api de tradução](https://github.com/diasjoaovitor/pedidos-graphql-api) com `GraphQL Yoga` e `Firebase Functions`, para retornar os dados obtidos do `Firestore` em `GraphQL`.
 
+[Deploy com GraphQL](https://628d7cff9e1d340946b7ecba--gleaming-faloodeh-3ad184.netlify.app/)
+
 # Pedidos
 
 Sistema para controle de pedidos em pequenas empresas

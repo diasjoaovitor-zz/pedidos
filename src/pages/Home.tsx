@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react"
 import { Layout, Card, Loader, Header, Menu, HomeCardItem, NotificationModal } from "../shared/components"
+import { useAuthContext } from "../shared/contexts"
 import { getHomeData } from "../shared/functions"
 import { useQueryHome } from "../shared/graphql"
 
 export const Home: React.FC = () => {
-  const { data, error } = useQueryHome()
+  const { user } = useAuthContext()
+
+  const { data, error } = useQueryHome(user?.uid as string)
   
   const [ companies, setCompanies ] = useState<string[]>([])
   const [ products, setProducts ] = useState<string[]>([])

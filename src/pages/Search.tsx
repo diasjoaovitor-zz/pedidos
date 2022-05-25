@@ -2,13 +2,17 @@ import { Divider, ListItem } from "@mui/material"
 import { useEffect } from "react"
 import { Card, Chip, Header, Layout, Loader, NotificationModal, ProductModal, SearchCardItem } from "../shared/components"
 import { GoBack } from "../shared/components/GoBack"
+import { useAuthContext } from "../shared/contexts"
 import { getCompanies, getSearchData } from "../shared/functions"
 import { useQuerySearch } from "../shared/graphql"
 import { useSearch } from "../shared/hooks"
 import { TProductPresentation } from "../shared/types"
 
 export const Search: React.FC = () => {
-  const { data } = useQuerySearch()
+  const { user } = useAuthContext()
+
+  const { data } = useQuerySearch(user?.uid as string)
+
   const { 
     chips,
     setData,

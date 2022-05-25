@@ -1,6 +1,6 @@
 `Em desenvolvimento`
 
-Esse projeto conta com uma [segunda branch](https://github.com/diasjoaovitor/pedidos/tree/useGraphQL) para a implementação do `GraphQL` utilizando o `Apollo Server` no frontend, e uma [api de tradução](https://github.com/diasjoaovitor/pedidos-graphql-api) com `GraphQL Yoga`, `Firestore` e `Firebase Functions`
+Esse projeto utiliza uma [api de tradução](https://github.com/diasjoaovitor/pedidos-graphql-api) com `GraphQL Yoga` e `Firebase Functions`, para retornar os dados obtidos do `Firestore` em `GraphQL`.
 
 # Pedidos
 

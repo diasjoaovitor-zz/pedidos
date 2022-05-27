@@ -1,49 +1,22 @@
 import { Divider, ListItem } from "@mui/material"
-import { useEffect } from "react"
-import { Card, Chip, Header, Layout, Loader, NotificationModal, ProductModal, SearchCardItem } from "../shared/components"
-import { GoBack } from "../shared/components/GoBack"
-import { useAuthContext } from "../shared/contexts"
-import { getCompanies, getSearchData } from "../shared/functions"
-import { useQuerySearch } from "../shared/graphql"
+import { Card, Chip, GoBack, Header, Layout, Loader, NotificationModal, ProductModal, SearchCardItem } from "../shared/components"
 import { useSearch } from "../shared/hooks"
 import { TProductPresentation } from "../shared/types"
 
 export const Search: React.FC = () => {
-  const { user } = useAuthContext()
-
-  const { data } = useQuerySearch(user?.uid as string)
-
   const { 
     chips,
-    setData,
     setProductPresentationContext,
-    products, setProducts, 
-    filteredProducts, setFilteredProducts,
-    filteredCompanies, setFilteredCompanies,
+    filteredProducts,
+    filteredCompanies,
     product, setProduct,
     addChip, removeChip,
     handleSearch, handleUpdate, handleDelete,
     modal, setModal,
     message, setMessage,
-    loader, setLoader
+    loader
   } = useSearch()
-
-  useEffect(() => {
-    if(data) {
-      const { products } = getSearchData(data)
-      const companies = getCompanies(products)
-      setData(data)
-      setProducts(products)
-      setFilteredProducts(products)
-      setFilteredCompanies(companies)
-      setLoader(false)
-    }
-  }, [data])
-
-  useEffect(() => {
-    handleSearch(chips)
-  }, [chips, products])
-
+  
   return (
     <>
     <Header title="Pesquisa">
@@ -58,7 +31,7 @@ export const Search: React.FC = () => {
         handleSubmit={addChip}
         handleDelete={removeChip} 
       />
-      <Card title="Empresas">
+      <Card title="Empresas" totalItems={filteredCompanies.length}>
         {filteredCompanies.map((company, i) => (
           <div key={i}>
             <ListItem>{company}</ListItem>
@@ -66,10 +39,10 @@ export const Search: React.FC = () => {
           </div>
         ))}
       </Card>
-      <Card title="Produtos">
-        {filteredProducts.map(product => (
+      <Card title="Produtos" totalItems={filteredProducts.length}>
+        {filteredProducts.map((product, i) => (
           <SearchCardItem 
-            key={product.id} product={product} 
+            key={i} product={product} 
             handleClick={() => {
               setProduct(product)
               setModal(true)
@@ -85,7 +58,7 @@ export const Search: React.FC = () => {
       handleDelete={handleDelete} 
     />}
     <NotificationModal message={message} handleClose={() => setMessage('')} />
-    {loader && <Loader />}
+    <Loader open={loader} />
     </>
   )
 }

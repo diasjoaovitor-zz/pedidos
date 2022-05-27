@@ -1,4 +1,4 @@
-import { TProductPresentation } from "../types";
+import { TProduct, TProductPresentation } from "../types"
 
 export const search = (params: string[], products: TProductPresentation[]): TProductPresentation[] | [] => {
   if(params.length > 0) {
@@ -14,3 +14,12 @@ export const search = (params: string[], products: TProductPresentation[]): TPro
   }
   return products  
 } 
+
+export const findProductToUpdate = (products: TProduct[], id: string): TProduct => {
+  const product = products.map(p => ({ 
+      ...p, 
+      availability: p.availability.filter(({ av_id }) => av_id !== id)
+    })
+  )
+  return product[0]
+}

@@ -1,11 +1,18 @@
 import { ChangeEvent, FormEvent, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { TAvailability, TProduct, TCreateProductService, TUpdateProductService } from "../types"
+import { makeUniqueId } from "@apollo/client/utilities"
+import { useMutation } from "@apollo/client"
+import { MUTATION_CREATE, MUTATION_UPDATE, QUERY_HOME, QUERY_SEARCH } from "../graphql"
+import { TAvailability, TProduct } from "../types"
 import { useAuthContext, useProductContext } from "../contexts"
 import { allFieldsAreFilled, getElementValues, removeEmptyFields, removeExcessAvailabilityFields } from "../functions"
+import { getErrorMessage } from "../validation"
 
-export const useProduct = (create: TCreateProductService, update: TUpdateProductService) => {
+export const useProduct = () => {
   const { productContext } = useProductContext()
+
+  const [ create ] = useMutation(MUTATION_CREATE)
+  const [ update ] = useMutation(MUTATION_UPDATE)
 
   const { user } = useAuthContext()
   const navigate = useNavigate()
@@ -15,11 +22,21 @@ export const useProduct = (create: TCreateProductService, update: TUpdateProduct
   const state = method === 'create' ? {
     title: 'Adicionar',
     buttonTitle: 'Adicionar',
-    submit: async (product: TProduct) => create(product)
+    submit: async (product: TProduct) => {
+      await create({ 
+        variables: { product },
+        refetchQueries: [QUERY_HOME, QUERY_SEARCH] 
+      })
+    }
   } : {
     title: 'Editar',
     buttonTitle: 'Salvar',
-    submit: async (product: TProduct) => update(product, productContext.id as string)
+    submit: async (product: TProduct) => {
+      await update({ 
+        variables: { product, id: productContext.id },
+        refetchQueries: [QUERY_HOME, QUERY_SEARCH] 
+      })
+    }
   }
 
   const product = { ...productContext, availability: [
@@ -45,31 +62,33 @@ export const useProduct = (create: TCreateProductService, update: TUpdateProduct
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number): void => {
     const av = [ ...availability ]
-    av[index] = { ...av[index], [ e.target.name ]: e.target.value }
+    const { name, value } = e.target
+    av[index] = { ...av[index], [ name ]: name !== 'price' ? value : Number(value) }
     setAvailabilityFields(av, allFieldsAreFilled(av))
   }
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault()
     const [ name, description, ] = getElementValues(e, ['name', 'description'])
-    const data = { 
+    const product = { 
       ref: user?.uid, 
       name, 
       description, 
-      // map is necessary while not implements mutation type of graphql
-      availability: removeEmptyFields(availability).map(({ brand, company, price }) => {
-        return {
-          brand, company, price
-        }
-      }) 
+      availability: removeEmptyFields(availability)
+        // remove __typename key
+        .map(({ brand, price, company, av_id }) => ( 
+          { brand, price, company, av_id: av_id || makeUniqueId("availability") }
+        ))
     }
     setLoader(true)
     try {
-      await state.submit(data)
+      await state.submit(product)
       navigate('/')
     } catch (error) {
+      const message = getErrorMessage('generic')
+      setMessage(message)
       setLoader(false)
-      setMessage('Erro ao submeter formulário')
+      throw error
     }
   }
 

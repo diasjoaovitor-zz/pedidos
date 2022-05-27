@@ -1,10 +1,10 @@
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from '@testing-library/user-event'
 import { createMemoryHistory } from "history"
-import { Route } from "./utils/Route"
-import { Login } from "../pages"
-import { AppThemeProvider } from "../shared/contexts"
-import { TAuthService } from "../shared/types"
+import { Route } from "../mocks"
+import { Login } from "../../pages"
+import { AppThemeProvider } from "../../shared/contexts"
+import { TAuthService } from "../../shared/types"
 
 jest.mock('firebase/auth')
 
@@ -43,7 +43,9 @@ describe('<Login />', () => {
     await userEvent.type(password, 'not-exists')
     await userEvent.click(button)
 
-    await waitFor(() => expect(screen.queryByText('Esse usuário não existe. Faça seu cadastro.')).toBeInTheDocument())
+    await waitFor(() => {
+      expect(screen.queryByText('Esse usuário não existe. Faça seu cadastro.')).toBeInTheDocument()
+    })
   }) 
 
   it('Wrong password', async () => {

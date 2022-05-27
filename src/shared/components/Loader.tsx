@@ -1,24 +1,17 @@
-import { Box, CircularProgress } from "@mui/material";
-import { useAppThemeContext } from "../contexts";
+import { Backdrop, CircularProgress } from "@mui/material"
+import { useAppThemeContext } from "../contexts"
 
-export const Loader: React.FC = () => {
+export const Loader: React.FC<{ open: boolean }> = ({ open }) => {
   const { theme } = useAppThemeContext()
   return (
-    <Box 
+    <Backdrop
       sx={{ 
-        display: 'flex', 
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'fixed',
-        width: '100%',
-        height: '100%',
-        top: 0,
-        left: 0,
-        zIndex: 1,
-        backgroundColor:  theme.palette.secondary.dark
+        color: theme.palette.secondary.dark, 
+        zIndex: theme => theme.zIndex.drawer + 1 
       }}
+      open={open}
     >
       <CircularProgress />
-    </Box>
+    </Backdrop>
   )
 }

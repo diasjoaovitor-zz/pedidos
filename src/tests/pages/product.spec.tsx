@@ -1,50 +1,49 @@
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from '@testing-library/user-event'
+import { MockedProvider } from '@apollo/client/testing'
 import { createMemoryHistory } from "history"
-import { Route } from "./utils/Route"
-import { Product } from "../pages"
-import { AppThemeProvider, ProductProvider, useProductContext } from "../shared/contexts"
-import { TProduct, TCreateProductService, TUpdateProductService } from "../shared/types"
+import { productMock, queriesMocks, Route } from "../mocks"
+import { Product } from "../../pages"
+import { AppThemeProvider, ProductProvider } from "../../shared/contexts"
 
-jest.mock('firebase/auth')
+const history = createMemoryHistory({ initialEntries: ['/product/create'] })
 
-const history = createMemoryHistory({ initialEntries: ['/product'] })
-
-const productState: TProduct =  {
-  name: 'Conhaque',
-  description: '',
-  availability: [{
-    brand: 'Presidente',
-    price: 9.98,
-    company: 'Atacadão'
-  }]
-}
-
-const setup = (create: TCreateProductService, update: TUpdateProductService) => {
+const setup = () => (
   render(
-    <AppThemeProvider>
-      <ProductProvider product={productState}>
-        <Route history={history}>
-          <Product create={create} update={update} />
-        </Route>
-      </ProductProvider>
-    </AppThemeProvider>
+    <MockedProvider mocks={queriesMocks}>
+      <AppThemeProvider>
+          <ProductProvider product={productMock}>
+            <Route history={history}>
+              <Product />
+            </Route>
+          </ProductProvider>
+     </AppThemeProvider>
+    </MockedProvider>
   )
-  return screen
-}
+)
+
+const originalWarn = console.warn.bind(console.warn)
 
 describe('<Product />', () => {
+  beforeAll(() => {
+    console.warn = (msg: any) =>
+      !msg.toString().includes('refetchQueries') && originalWarn(msg)
+  })
+  afterAll(() => {
+    console.warn = originalWarn
+  })
+
   it('Create dynamic availability fields', async () => {
-    const screen = setup(jest.fn(), jest.fn())
+    setup()
     let fieldsets = screen.getAllByRole('group')
     
     expect(fieldsets.length).toBe(2)
 
     for (let fieldset of fieldsets) {
       const [ brand, value, company ] = fieldset.querySelectorAll('input')
-      await userEvent.type(brand, productState.name)
-      await userEvent.type(value, String(productState.availability[0].price))
-      await userEvent.type(company, productState.availability[0].company)
+      await userEvent.type(brand, productMock.availability[0].brand)
+      await userEvent.type(value, String(productMock.availability[0].price))
+      await userEvent.type(company, productMock.availability[0].company)
     }
     fieldsets = screen.getAllByRole('group')
 
@@ -60,9 +59,7 @@ describe('<Product />', () => {
   }) 
 
   it('Adds new product', async () => {
-    history.push('/product/create')
-
-    const screen = setup(jest.fn(), jest.fn())
+    setup()
 
     const product = screen.getByLabelText('Produto *')
     const brand = screen.getByLabelText('Marca *')
@@ -71,9 +68,9 @@ describe('<Product />', () => {
     const button = screen.getByRole('button')
 
     await userEvent.type(product, 'Conhaque')
-    await userEvent.type(brand, productState.name)
-    await userEvent.type(value, String(productState.availability[0].price))
-    await userEvent.type(company, productState.availability[0].company)
+    await userEvent.type(brand, productMock.availability[0].brand)
+    await userEvent.type(value, String(productMock.availability[0].price))
+    await userEvent.type(company, productMock.availability[0].company)
     await userEvent.click(button)
 
     await waitFor(() => expect(button.textContent).toBe('Adicionar'))
@@ -83,11 +80,12 @@ describe('<Product />', () => {
   it('Updates product', async () => {
     history.push('/product/update')
 
-    const screen = setup(jest.fn(), jest.fn())
+    setup()
 
     const description = screen.getByLabelText('Descrição')
     const button = screen.getByRole('button')
 
+    await userEvent.clear(description)
     await userEvent.type(description, 'Garrafa de vidro 1L')
     await userEvent.click(button)
 

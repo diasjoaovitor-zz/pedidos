@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogContentText, useMediaQuery, useTheme } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContentText, useMediaQuery, useTheme } from "@mui/material"
 
 type Props = {
   message: string

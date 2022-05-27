@@ -37,7 +37,7 @@ export const Login: React.FC<Props> = ({ login }) => {
         </Button>
       </Auth>
       <NotificationModal message={message} handleClose={() => setMessage('')} />
-      {loader && <Loader />}
+      <Loader open={loader} />
     </>
   )
 }

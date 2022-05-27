@@ -1,16 +1,7 @@
-import { Header, Loader, NotificationModal } from "../shared/components"
-import { TCreateProductService, TUpdateProductService } from "../shared/types"
-import { GoBack } from "../shared/components/GoBack"
-import { ProductForm } from "../shared/components/ProductForm"
 import { useProduct } from "../shared/hooks"
-import { ProductFieldset } from "../shared/components/ProductFieldset"
+import { GoBack, Header, Loader, NotificationModal, ProductFieldset, ProductForm } from "../shared/components"
 
-type Props = {
-  create: TCreateProductService
-  update: TUpdateProductService
-}
-
-export const Product: React.FC<Props> = ({ create, update }) => {
+export const Product: React.FC = () => {
   const { 
     state,
     product,
@@ -18,7 +9,7 @@ export const Product: React.FC<Props> = ({ create, update }) => {
     loader,
     message, setMessage,
     handleChange, handleSubmit
-  } = useProduct(create, update)
+  } = useProduct()
 
   return (
     <>
@@ -40,7 +31,7 @@ export const Product: React.FC<Props> = ({ create, update }) => {
       })}
     </ProductForm>
     <NotificationModal message={message} handleClose={() => setMessage('')} />
-    {loader && <Loader />}
+    <Loader open={loader} />
     </>
   )
 }

@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom"
 import { Container, IconButton, TextField } from "@mui/material"
-import { AddCircle } from '@mui/icons-material';
+import { AddCircle } from '@mui/icons-material'
 import { ChangeEvent, ReactNode } from "react"
 import { Link } from "react-router-dom"
 import { useProductContext } from "../contexts"
 import { TProductPresentation } from "../types"
-import { productState } from "../states";
+import { productState } from "../states"
 
 type Props = {
   children: ReactNode

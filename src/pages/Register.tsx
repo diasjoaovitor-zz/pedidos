@@ -46,7 +46,7 @@ export const Register: React.FC<Props> = ({ register }) => {
       </Button>
     </Auth>
     <NotificationModal message={message} handleClose={() => setMessage('')} />
-    {loader && <Loader />}
+    <Loader open={loader} />
     </>
   )
 }

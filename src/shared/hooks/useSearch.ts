@@ -1,13 +1,18 @@
-import { FormEvent, useState } from "react"
+import { useMutation, useQuery } from "@apollo/client"
+import { FormEvent, useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { useProductContext } from "../contexts"
-import { getCompanies, getElementValues, search } from "../functions"
-import { destroy } from "../services/firebase"
-import { QuerySearchData, TProductPresentation } from "../types"
+import { useAuthContext, useProductContext } from "../contexts"
+import { findProductToUpdate, getCompanies, getElementValues, getSearchData, removeTypename, search } from "../functions"
+import { MUTATION_DESTROY, MUTATION_UPDATE, QUERY_HOME, QUERY_SEARCH } from "../graphql"
+import { QuerySearchData, TProduct, TProductPresentation } from "../types"
+import { getErrorMessage } from "../validation"
 
 export const useSearch = () => {
-  const navigate = useNavigate()
+  const [ update ] = useMutation(MUTATION_UPDATE)
+  const [ destroy ] = useMutation(MUTATION_DESTROY)
 
+  const { user } = useAuthContext()
+  const navigate = useNavigate()
   const { state: chip } = useLocation()
   const { productPresentationContext, setProductContext, setProductPresentationContext } = useProductContext()
 
@@ -20,6 +25,33 @@ export const useSearch = () => {
   const [ modal, setModal ] = useState(Object.keys(productPresentationContext).length !== 0)
   const [ loader, setLoader ] = useState(true)
   const [ message, setMessage ] = useState('')
+
+  useQuery<QuerySearchData>(
+    QUERY_SEARCH, 
+    { 
+      variables: { ref: user?.uid },
+      onError: (error) => {
+        const message = getErrorMessage('generic')
+        setMessage(message)
+        setLoader(false)
+        throw error
+      },
+      onCompleted: data => {
+        const { products } = getSearchData(data)
+        const companies = getCompanies(products)
+        setData(data)
+        setProducts(products)
+        setFilteredProducts(products)
+        setFilteredCompanies(companies)
+        setLoader(false)
+      }
+    }
+  )
+
+  useEffect(() => {
+    handleSearch(chips)
+  }, [chips, products])
+
 
   const addChip = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
@@ -47,13 +79,38 @@ export const useSearch = () => {
   }
 
   const handleDelete = async () => {
+    const message = getErrorMessage('generic')
+
+    if(!data || !product) return setMessage(message)
+
+    const p = data.products.find(({ id }) => id === product?.id)
+    setLoader(true)
     try {
-      product && await destroy(product.id)
-    } catch (error: unknown) {
-      setLoader(false)
-      setMessage('Algo deu errado!')
+      if(p?.availability.length === 1) {
+        await destroy({ 
+          variables: { id: p?.id },
+          refetchQueries: [QUERY_HOME, QUERY_SEARCH] 
+         })
+      } else {
+        const updated = removeTypename(findProductToUpdate(data.products, product.av_id)) as TProduct
+        const a = {
+          ...updated,
+          availability: updated.availability.map(({ brand, company, price, av_id }) => ({
+            brand, company, price, av_id
+          }))
+        }
+
+        await update({ 
+          variables: { id: p?.id, product: a},
+          refetchQueries: [QUERY_HOME, QUERY_SEARCH] 
+        })
+      }
+      setModal(false)
+    } catch (error) {
+      setMessage(message)
+      throw error
     } finally {
-      setProduct(undefined)
+      setLoader(false)
     }
   }
 

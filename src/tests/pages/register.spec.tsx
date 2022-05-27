@@ -1,10 +1,10 @@
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from '@testing-library/user-event'
 import { createMemoryHistory } from "history"
-import { Route } from "./utils/Route"
-import { Register } from "../pages"
-import { AppThemeProvider } from "../shared/contexts"
-import { TAuthService } from "../shared/types"
+import { Route } from "../mocks"
+import { Register } from "../../pages"
+import { AppThemeProvider } from "../../shared/contexts"
+import { TAuthService } from "../../shared/types"
 
 jest.mock('firebase/auth')
 
@@ -46,6 +46,7 @@ describe('<Register />', () => {
 
   it('Email already in use', async () => {
     const register = jest.fn()
+    const error = 
     register.mockImplementation(() => {
       throw { code: 'auth/email-already-in-use' }
     })

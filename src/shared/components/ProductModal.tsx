@@ -1,9 +1,9 @@
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Box,  DialogContent, Divider, IconButton, Stack, Toolbar, Typography } from "@mui/material";
-import { TProductPresentation } from "../types";
-import { Title } from ".";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { Box,  DialogContent, Divider, IconButton, Stack, Toolbar, Typography } from "@mui/material"
+import { TProductPresentation } from "../types"
+import { Title } from "."
 
-import { Button, Dialog, DialogActions, useMediaQuery, useTheme } from "@mui/material";
+import { Button, Dialog, DialogActions, useMediaQuery, useTheme } from "@mui/material"
 
 type Props = {
   product: TProductPresentation | undefined

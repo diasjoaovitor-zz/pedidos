@@ -33,5 +33,6 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
     <AuthContext.Provider value={{ user }}>
      {children}
     </AuthContext.Provider> :
-    <Loader />
+    <Loader open={loader} />
+
 }

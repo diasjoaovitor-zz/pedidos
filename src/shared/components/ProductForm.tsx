@@ -1,6 +1,6 @@
-import { FormEvent, ReactNode } from "react";
-import { Box, Button, Card, Container, TextField } from "@mui/material";
-import { handleFocus } from "../functions";
+import { FormEvent, ReactNode } from "react"
+import { Box, Button, Card, Container, TextField } from "@mui/material"
+import { handleFocus } from "../functions"
 
 type Props = {
   name: string

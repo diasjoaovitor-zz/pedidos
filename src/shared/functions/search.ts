@@ -23,3 +23,7 @@ export const findProductToUpdate = (products: TProduct[], id: string): TProduct 
   )
   return product[0]
 }
+
+export const chipAlreadyExists = (chips: string[], chip: string): boolean => {
+  return chips.includes(chip)
+}

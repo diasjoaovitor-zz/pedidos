@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "@apollo/client"
 import { FormEvent, useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useAuthContext, useProductContext } from "../contexts"
-import { findProductToUpdate, getCompanies, getElementValues, getSearchData, removeTypename, search } from "../functions"
+import { chipAlreadyExists, findProductToUpdate, getCompanies, getElementValues, getSearchData, removeTypename, search } from "../functions"
 import { MUTATION_DESTROY, MUTATION_UPDATE, QUERY_HOME, QUERY_SEARCH } from "../graphql"
 import { QuerySearchData, TProduct, TProductPresentation } from "../types"
 import { getErrorMessage } from "../validation"
@@ -55,8 +55,8 @@ export const useSearch = () => {
 
   const addChip = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
-    const chps = getElementValues(e, ['chip'])
-    setChips([ ...chips, ...chps ])
+    const chip = getElementValues(e, ['chip'])[0]
+    !chipAlreadyExists(chips, chip) && setChips([ ...chips, chip ])
     e.currentTarget.reset()
   }
 

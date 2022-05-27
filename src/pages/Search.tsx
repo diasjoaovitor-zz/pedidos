@@ -1,6 +1,7 @@
 import { Divider, ListItem } from "@mui/material"
 import { MouseEvent } from "react"
 import { Card, Chip, GoBack, Header, Layout, Loader, NotificationModal, ProductModal, SearchCardItem } from "../shared/components"
+import { chipAlreadyExists } from "../shared/functions"
 import { useSearch } from "../shared/hooks"
 import { TProductPresentation } from "../shared/types"
 
@@ -37,7 +38,8 @@ export const Search: React.FC = () => {
           <div key={i}>
             <ListItem 
               onClick={(e: MouseEvent<HTMLLIElement>) => {
-                setChips([ ...chips,  e.currentTarget.textContent as string ])
+                const chip = e.currentTarget.textContent as string
+                !chipAlreadyExists(chips, chip) && setChips([ ...chips, chip ])
               }}>
                 {company}
               </ListItem>

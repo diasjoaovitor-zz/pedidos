@@ -6,5 +6,8 @@ export const lightTheme = createTheme({
     primary: {
       main: '#FFA000' 
     },
+    secondary: {
+      main: '#fff'
+    }
   }
 })

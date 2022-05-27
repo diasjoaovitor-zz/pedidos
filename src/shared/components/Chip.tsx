@@ -13,7 +13,7 @@ export const Chip: React.FC<Props> = ({ chips, handleDelete, handleSubmit }) => 
   const [ color, setColor ] = useState('#fff')
 
   useEffect(() => {
-    setColor(!focus ? '#fff' : 'primary.main')
+    setColor(!focus ? 'inherit' : 'primary.main')
   }, [focus])
 
   return (

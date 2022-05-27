@@ -17,7 +17,7 @@ Testes de unidade com [React Testing Library](https://testing-library.com/docs/r
 
 ## Como rodar o projeto
 
-Voce pode testar o [projeto em produção](https://629153cff27d90060736cfa6--gleaming-faloodeh-3ad184.netlify.app/) acessando com:
+Voce pode testar o [projeto em produção](https://pedidosapp.netlify.app/) acessando com:
 
 Email: 
 

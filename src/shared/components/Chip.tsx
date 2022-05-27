@@ -1,6 +1,6 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react'
 import { Card, Chip as C, FormLabel, Stack } from '@mui/material'
-import { InputUnstyled } from '@mui/base';
+import { InputUnstyled } from '@mui/base'
 
 type Props = {
   chips: string[]

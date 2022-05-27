@@ -1,7 +1,6 @@
-import { gql, useQuery } from "@apollo/client"
-import { QueryHomeData, QuerySearchData } from "../types"
+import { gql } from "@apollo/client"
 
-const QUERY_HOME = gql`
+export const QUERY_HOME = gql`
   query ($ref: String!) {
     products(ref: $ref) {
       availability {
@@ -12,17 +11,15 @@ const QUERY_HOME = gql`
   }
 `
 
-export const useQueryHome = (ref: string) => {
-  return useQuery<QueryHomeData>(QUERY_HOME, { variables: { ref } })
-}
-
-const QUERY_SEARCH = gql`
+export const QUERY_SEARCH = gql`
   query ($ref: String!) {
     products(ref: $ref) {
       description
       id
       name
+      ref
       availability {
+        av_id
         brand
         company
         price
@@ -30,7 +27,3 @@ const QUERY_SEARCH = gql`
     }
 }
 `
-
-export const useQuerySearch = (ref: string) => {
-  return useQuery<QuerySearchData>(QUERY_SEARCH, { variables: { ref } })
-}

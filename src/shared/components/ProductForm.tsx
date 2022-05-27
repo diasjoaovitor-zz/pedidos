@@ -15,6 +15,7 @@ export const ProductForm: React.FC<Props> = ({ name, description, buttonTitle, c
     sx={{
       paddingX: 2,
       paddingY: 4,
+      height: "100vh",
       '& .MuiTextField-root': {
         marginBottom: 4,
       },

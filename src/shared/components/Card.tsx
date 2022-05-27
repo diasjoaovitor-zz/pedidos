@@ -4,10 +4,11 @@ import { Title } from "./Title"
 
 type Props = {
   title: string
+  totalItems: number
   children: ReactNode
 }
 
-export const Card: React.FC<Props> = ({ title, children }) => (
+export const Card: React.FC<Props> = ({ title, totalItems, children }) => (
   <C sx={{ 
     padding: 2, 
     paddingBottom: 1,
@@ -23,7 +24,7 @@ export const Card: React.FC<Props> = ({ title, children }) => (
     </Title>
     <List sx={{ '& .MuiDivider-root': { backgroundColor: 'gray' } }}>
       <Divider />
-      {children}
+      {totalItems > 0 ? children : <p>Nenhum dado encontrado</p>}
     </List>
   </C>
 )

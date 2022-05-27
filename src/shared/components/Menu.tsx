@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { IconButton, Menu as MatMenu, MenuItem } from "@mui/material"
 import { Lightbulb, Logout, Menu as MenuIcon } from "@mui/icons-material"
-import { logout } from "../services/firebase"
+import { logout } from "../firebase"
 import { useAppThemeContext } from "../contexts"
 
 export const Menu: React.FC = () => {

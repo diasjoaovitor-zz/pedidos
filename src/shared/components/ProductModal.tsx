@@ -44,7 +44,7 @@ export const ProductModal: React.FC<Props> = ({ product, handleClose, handleUpda
           </Toolbar>
           <Box sx={{ border: 1, borderColor: 'gray' }}>
               <Stack direction="row" justifyContent="space-between" padding={1}>
-                <Box>
+                <Box marginRight={2}>
                   <Typography variant="caption" component="span">
                     Produto
                   </Typography>

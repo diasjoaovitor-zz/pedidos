@@ -115,7 +115,7 @@ export const useSearch = () => {
   }
 
   return { 
-    chips,
+    chips, setChips,
     setData,
     setProductPresentationContext,
     products, setProducts, 

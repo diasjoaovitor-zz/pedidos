@@ -1,11 +1,12 @@
 import { Divider, ListItem } from "@mui/material"
+import { MouseEvent } from "react"
 import { Card, Chip, GoBack, Header, Layout, Loader, NotificationModal, ProductModal, SearchCardItem } from "../shared/components"
 import { useSearch } from "../shared/hooks"
 import { TProductPresentation } from "../shared/types"
 
 export const Search: React.FC = () => {
   const { 
-    chips,
+    chips, setChips,
     setProductPresentationContext,
     filteredProducts,
     filteredCompanies,
@@ -34,7 +35,12 @@ export const Search: React.FC = () => {
       <Card title="Empresas" totalItems={filteredCompanies.length}>
         {filteredCompanies.map((company, i) => (
           <div key={i}>
-            <ListItem>{company}</ListItem>
+            <ListItem 
+              onClick={(e: MouseEvent<HTMLLIElement>) => {
+                setChips([ ...chips,  e.currentTarget.textContent as string ])
+              }}>
+                {company}
+              </ListItem>
             <Divider />
           </div>
         ))}

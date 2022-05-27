@@ -22,8 +22,6 @@ export const Menu: React.FC = () => {
     <>
     <IconButton
       aria-controls={open ? 'basic-menu' : undefined}
-      aria-haspopup="true"
-      aria-expanded={open ? 'true' : undefined}
       sx={{ color: 'background.default' }}
       onClick={handleClick}
       role="menu"

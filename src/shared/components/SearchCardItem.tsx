@@ -1,5 +1,6 @@
 import { Divider, ListItem, Typography } from "@mui/material"
 import { MouseEvent } from "react"
+import { formatCurrency } from "../functions"
 import { TProductPresentation } from "../types"
 
 type Props = {
@@ -29,7 +30,7 @@ export const SearchCardItem: React.FC<Props> = ({ product, handleClick }) => (
       </Typography>
     </div>
     <Typography variant="h5" component="strong" fontWeight="bold" textAlign="right">
-      {product.price}
+      {formatCurrency(product.price)}
     </Typography>
   </ListItem>
   <Divider />

@@ -51,7 +51,7 @@ export const Search: React.FC = () => {
         ))}
       </Card>
     </Layout>
-    {modal && <ProductModal 
+    {modal && product && <ProductModal 
       product={product} 
       handleClose={() => setProduct(undefined)}
       handleUpdate={handleUpdate} 

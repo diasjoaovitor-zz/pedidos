@@ -4,9 +4,10 @@ import { TProductPresentation } from "../types"
 import { Title } from "."
 
 import { Button, Dialog, DialogActions, useMediaQuery, useTheme } from "@mui/material"
+import { formatCurrency } from '../functions'
 
 type Props = {
-  product: TProductPresentation | undefined
+  product: TProductPresentation
   handleClose(): void
   handleUpdate(): void
   handleDelete(): void
@@ -48,7 +49,7 @@ export const ProductModal: React.FC<Props> = ({ product, handleClose, handleUpda
                     Produto
                   </Typography>
                   <Typography variant="inherit" component="p">
-                    {product?.name}
+                    {product.name}
                   </Typography>
                 </Box>
                 <Box textAlign="right">
@@ -56,7 +57,7 @@ export const ProductModal: React.FC<Props> = ({ product, handleClose, handleUpda
                     Marca
                   </Typography>
                   <Typography variant="inherit" component="p">
-                    {product?.brand}
+                    {product.brand}
                   </Typography>
                 </Box>
               </Stack>
@@ -67,7 +68,7 @@ export const ProductModal: React.FC<Props> = ({ product, handleClose, handleUpda
                     Descrição
                   </Typography>
                   <Typography variant="inherit" component="p">
-                    {product?.description}
+                    {product.description}
                   </Typography>
                 </Box>
                 <Box textAlign="right">
@@ -75,7 +76,7 @@ export const ProductModal: React.FC<Props> = ({ product, handleClose, handleUpda
                     Valor
                   </Typography>
                   <Typography variant="inherit" component="p">
-                    {product?.price}
+                    {formatCurrency(product.price)}
                   </Typography>
                 </Box>
               </Stack>

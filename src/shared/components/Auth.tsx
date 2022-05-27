@@ -1,5 +1,5 @@
 import { Ballot } from "@mui/icons-material"
-import { Box, Card, Container, Toolbar, Typography } from "@mui/material"
+import { Container, FormControl, Toolbar, Typography } from "@mui/material"
 import { FormEvent, ReactNode } from "react"
 import { Link } from "react-router-dom"
 import { Title } from "./Title"
@@ -40,14 +40,21 @@ export const Auth: React.FC<Props> = ({ children, title, to, handleSubmit }) => 
           Pedidos
         </Typography>    
       </Toolbar>
-      <Card sx={{ width: '100%', maxWidth: 'sm', padding: 3 }}>
-        <Box component="form" role="form" onSubmit={handleSubmit}>
-          <Title component="h2">
-            {title}
-          </Title>
-          {children}
-        </Box>
-      </Card>
+      <FormControl 
+        component="form" role="form" fullWidth
+        sx={{ 
+          backgroundColor: 'background.paper', 
+          padding: 3,
+          borderRadius: 2,
+          maxWidth: "sm"
+        }}
+        onSubmit={handleSubmit}
+      >
+        <Title component="h2">
+          {title}
+        </Title>
+        {children}
+      </FormControl>
       <Typography component="p">
         <Link to={to}>
           {to === '/register' ? 'Não tem uma conta? Cadastre-se!' : 'Já tenho uma conta'}

@@ -3,7 +3,7 @@ import { FormEvent, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { getElementValues } from "../functions"
 import { TAuthService } from "../types"
-import { authValidation } from "../validation"
+import { getErrorMessage } from "../validation"
 
 export const useAuthSubmit = (auth: TAuthService) => {
   const navigate = useNavigate()
@@ -26,7 +26,7 @@ export const useAuthSubmit = (auth: TAuthService) => {
     } catch (error: unknown) {
       setLoader(false)
       const err = error as AuthError
-      const message = authValidation(err.code)
+      const message = getErrorMessage(err.code)
       setMessage(message)
     }
   }

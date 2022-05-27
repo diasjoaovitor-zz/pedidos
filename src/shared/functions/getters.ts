@@ -26,16 +26,17 @@ export const getSearchData = (data: QuerySearchData): TSearchData => {
   const products: TProductPresentation[] = []
   data.products.forEach(product => {
     const data = {
-      id: product.id,
+      id: product.id as string,
       name: product.name,
       description: product.description
     }
-    product.availability.forEach(({ company, price, brand }) => {
+    product.availability.forEach(({ company, price, brand, av_id }) => {
       products.push({
         ...data,
         brand, 
         company,
-        price
+        price,
+        av_id: av_id as string
       })
     })
   })

@@ -1,3 +1,5 @@
+import { TProduct } from "./product"
+
 export type QueryHomeData = {
   products: {
     name: string
@@ -8,14 +10,5 @@ export type QueryHomeData = {
 }
 
 export type QuerySearchData = {
-  products: {
-    description: string
-    id: string
-    name: string
-    availability: {
-      brand: string
-      company: string
-      price: number
-    }[]
-  }[]
+  products: TProduct[]
 }
